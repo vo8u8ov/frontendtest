@@ -165,6 +165,14 @@ const UIPanel: React.FC<UIPanelProps> = ({
           </label>
         </div>
       </div>
+      <div>
+        <button
+          className="bg-blue-600 mt-80 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 w-full"
+          onClick={() => console.log("データをダウンロード")} // クリック時の動作（仮実装）
+        >
+          データをダウンロード
+        </button>
+      </div>
     </div>
   );
 };
