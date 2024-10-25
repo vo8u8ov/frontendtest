@@ -25,8 +25,8 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
       <Header />
-      <div className="flex flex-grow">
-        <div className="flex-grow p-4">
+      <div className="flex flex-grow p-4">
+        <div className="flex-grow">
           <h2 className="text-lg font-bold">
             データ表示エリア（チャートなど）
           </h2>
