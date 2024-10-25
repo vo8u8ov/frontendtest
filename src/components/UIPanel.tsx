@@ -69,7 +69,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
   handleDisplayTypeChange,
 }) => {
   return (
-    <div className="w-1/4 h-[700px] bg-gray-700 p-3 pt-1 rounded-lg overflow-y-auto fixed bottom-20 right-5">
+    <div className="w-full border bg-gray-700  p-4 rounded-lg">
       {/* 表示内容を選択 */}
       <h3 className="text-lg font-bold mb-2">表示内容を選択</h3>
       <hr className="border-gray-500 mb-4" />
