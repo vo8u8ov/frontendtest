@@ -24,7 +24,6 @@ export const fetchEstateTransactionData = async (
     }
 
     const data = await response.json();
-    console.log(data);
 
     // APIレスポンスが期待通りか確認
     if (data && data.result && data.result.years) {
