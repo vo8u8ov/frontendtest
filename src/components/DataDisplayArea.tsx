@@ -96,6 +96,10 @@ const DataDisplayArea: React.FC = () => {
     setDisplayType(type);
   };
 
+  const displayTypeText =
+    displayType === 1 ? "住宅地" : displayType === 2 ? "商業地" : "";
+  const prefName = `${prefCode}`;
+
   // グラフのデータと設定
   const chartData = {
     labels: ["選択した都道府県", "全国平均"],
@@ -118,13 +122,6 @@ const DataDisplayArea: React.FC = () => {
           font: {
             size: 10,
           },
-        },
-      },
-      title: {
-        display: true,
-        text: `${selectedYear}年の取引価格 (円/㎡)`,
-        font: {
-          size: 14,
         },
       },
     },
@@ -184,6 +181,11 @@ const DataDisplayArea: React.FC = () => {
             <p className="text-red-500">{error}</p>
           ) : (
             <div style={{ width: "50%", height: "500px" }}>
+              <div className="text-center mb-2">
+                <span className="text-lg font-semibold">
+                  {prefName} {selectedYear}年 {displayTypeText}
+                </span>
+              </div>
               <Bar data={chartData} options={chartOptions} />
             </div>
           )}
