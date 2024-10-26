@@ -106,7 +106,7 @@ const DataDisplayArea: React.FC = () => {
 
   // グラフのデータと設定
   const chartData = {
-    labels: ["選択した都道府県", "全国平均"],
+    labels: [prefName, "全国平均"],
     datasets: [
       {
         label: "取引価格 (円/㎡)",
