@@ -4,6 +4,20 @@ import { EstateTransactionResponse } from "./types";
 const BASE_URL = "https://opendata.resas-portal.go.jp/api/v1";
 const API_KEY = "76kvWSYLuEnBPH9z7TGFZsVwOiORa38Z2HVlZVpa"; // APIキーを設定
 
+export const fetchPrefectureName = async (
+  prefCode: number
+): Promise<string> => {
+  // APIエンドポイントのURLを適切に設定してください
+  const response = await fetch(
+    `https://example.com/api/prefecture/${prefCode}`
+  );
+  if (!response.ok) {
+    throw new Error("都道府県名の取得に失敗しました。");
+  }
+  const data = await response.json();
+  return data.name; // 取得した都道府県名を返します
+};
+
 export const fetchEstateTransactionData = async (
   prefCode: number,
   year: number,

@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { fetchEstateTransactionData } from "../api";
+import { fetchEstateTransactionData, fetchPrefectureName } from "../api";
 import { EstateTransactionResponse } from "../types";
 
 // Chart.jsのコンポーネントを登録
@@ -33,9 +33,25 @@ const DataDisplayArea: React.FC = () => {
   );
   const [averagePrice, setAveragePrice] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [prefName, setPrefName] = useState<string>("選択した都道府県"); // 都道府県名の状態を追加
   const [cache, setCache] = useState<{
     [key: string]: EstateTransactionResponse;
   }>({});
+
+  // 都道府県名を取得
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const name = await fetchPrefectureName(prefCode);
+        setPrefName(name); // 都道府県名を更新
+      } catch (error) {
+        console.error("都道府県名の取得エラー:", error);
+        setPrefName("選択した都道府県"); // エラーがあった場合のデフォルト名
+      }
+    };
+
+    fetchName(); // 関数を呼び出す
+  }, [prefCode]); // prefCodeが変更されたときに実行
 
   // 初期データの取得
   useEffect(() => {
@@ -136,7 +152,7 @@ const DataDisplayArea: React.FC = () => {
 
   // グラフのデータと設定
   const chartData = {
-    labels: ["選択した都道府県", "全国平均"],
+    labels: [prefName, "全国平均"], // 都道府県名をラベルに使用
     datasets: [
       {
         label: "取引価格 (円/㎡)",
@@ -175,14 +191,24 @@ const DataDisplayArea: React.FC = () => {
             size: 12,
           },
         },
+        grid: {
+          color: "rgba(255, 255, 255, 0.2)", // 白い線
+          borderDash: [4, 4], // 破線スタイル
+          tickLength: 5, // メモリごとの短い線の長さ
+        },
         ticks: {
+          color: "white",
           font: {
             size: 10,
           },
         },
       },
       x: {
+        grid: {
+          color: "rgba(255, 255, 255, 0.2)", // X軸の白い線
+        },
         ticks: {
+          color: "white",
           font: {
             size: 10,
           },
