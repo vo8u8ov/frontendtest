@@ -31,57 +31,11 @@ const DataDisplayArea: React.FC = () => {
   const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
     null
   );
-  const [averagePrice, setAveragePrice] = useState<number>(0);
+  // const [averagePrice, setAveragePrice] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [cache, setCache] = useState<{
     [key: string]: EstateTransactionResponse;
   }>({});
-
-  // 初期データの取得
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const allPrefDataPromises = Array.from({ length: 47 }, (_, i) =>
-          fetchEstateTransactionData(i + 1, selectedYear, displayType)
-        );
-
-        const allPrefData = await Promise.all(allPrefDataPromises);
-
-        // キャッシュに全データを保存
-        const newCache: { [key: string]: EstateTransactionResponse } = {};
-
-        allPrefData.forEach((data, index) => {
-          // データが正しいか確認
-          if (data && data.data) {
-            newCache[`${index + 1}-${selectedYear}-${displayType}`] = data; // 正しいキーでキャッシュに保存
-          }
-        });
-
-        setCache(newCache);
-
-        // 全国平均価格を計算
-        const allPrices = allPrefData.flatMap((data) =>
-          data.data.map((item) => item.price)
-        );
-        const avgPrice =
-          allPrices.length > 0
-            ? allPrices.reduce((sum, price) => sum + price, 0) /
-              allPrices.length
-            : 0;
-
-        setAveragePrice(avgPrice);
-
-        // 東京都のデータを取得
-        const tokyoData = allPrefData[0]; // 東京都のデータを取得
-        setPriceData(tokyoData);
-      } catch (err) {
-        console.error("データの取得エラー:", err);
-        setError("データの取得に失敗しました。");
-      }
-    };
-
-    fetchInitialData();
-  }, [selectedYear, displayType]); // 初期データ取得時に依存
 
   // データ取得のハンドラー
   useEffect(() => {
@@ -140,7 +94,7 @@ const DataDisplayArea: React.FC = () => {
     datasets: [
       {
         label: "取引価格 (円/㎡)",
-        data: [priceData ? priceData.data[0]?.price : 0, averagePrice],
+        data: [priceData ? priceData.data[0]?.price : 0],
         backgroundColor: ["#4C9F70", "#FF6347"],
       },
     ],
