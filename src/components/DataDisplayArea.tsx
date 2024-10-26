@@ -148,13 +148,45 @@ const DataDisplayArea: React.FC = () => {
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
+        labels: {
+          font: {
+            size: 10,
+          },
+        },
       },
       title: {
         display: true,
-        text: `${selectedYear}年の取引価格`,
+        text: `${selectedYear}年の取引価格 (円/㎡)`,
+        font: {
+          size: 14,
+        },
+      },
+    },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "取引価格 (円/㎡)",
+          font: {
+            size: 12,
+          },
+        },
+        ticks: {
+          font: {
+            size: 10,
+          },
+        },
+      },
+      x: {
+        ticks: {
+          font: {
+            size: 10,
+          },
+        },
       },
     },
   };
@@ -177,7 +209,7 @@ const DataDisplayArea: React.FC = () => {
           {error ? (
             <p className="text-red-500">{error}</p>
           ) : (
-            <div>
+            <div style={{ width: "80%", height: "300px" }}>
               <Bar data={chartData} options={chartOptions} />
             </div>
           )}
