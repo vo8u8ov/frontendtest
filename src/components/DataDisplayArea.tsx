@@ -72,8 +72,30 @@ const DataDisplayArea: React.FC = () => {
       setPriceData(cache[cacheKey]);
       setError(null); // エラーをリセット
     } else {
-      // キャッシュにデータがない場合の処理
-      setError("キャッシュにデータがありません。");
+      // キャッシュにデータがない場合のみAPI呼び出しとエラーメッセージ設定
+      const fetchAndCacheData = async () => {
+        try {
+          const data = await fetchEstateTransactionData(
+            prefCode,
+            selectedYear,
+            displayType
+          );
+          setPriceData(data);
+
+          // キャッシュに新たに保存
+          setCache((prevCache) => ({
+            ...prevCache,
+            [cacheKey]: data,
+          }));
+
+          setError(null);
+        } catch (err) {
+          console.error("データ取得エラー:", err);
+          setError("キャッシュにデータがありません。");
+        }
+      };
+
+      fetchAndCacheData();
     }
   }, [prefCode, selectedYear, displayType, cache]);
 
