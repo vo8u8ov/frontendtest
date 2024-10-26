@@ -11,58 +11,71 @@ const DataDisplayArea: React.FC = () => {
   const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
     null
   );
-  const [nationalAveragePrice, setNationalAveragePrice] = useState<
-    number | null
-  >(null);
+  const [averagePrice, setAveragePrice] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+  const [cache, setCache] = useState<{
+    [key: string]: EstateTransactionResponse;
+  }>({});
 
-  // データ取得のハンドラー
+  // 初期データの取得
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
-        setError(null); // エラーをリセット
-        const data = await fetchEstateTransactionData(
-          prefCode,
-          selectedYear,
-          displayType
+        const allPrefDataPromises = Array.from({ length: 47 }, (_, i) =>
+          fetchEstateTransactionData(i + 1, selectedYear, displayType)
         );
-        setPriceData(data);
 
-        // 全国平均の計算用に全ての都道府県のデータを取得
-        const allPrefCodes = Array.from({ length: 47 }, (_, i) => i + 1);
-        const nationalPrices: number[] = [];
+        const allPrefData = await Promise.all(allPrefDataPromises);
 
-        for (const code of allPrefCodes) {
-          const prefData = await fetchEstateTransactionData(
-            code,
-            selectedYear,
-            displayType
-          );
-          if (prefData && prefData.data.length > 0) {
-            const averagePrice =
-              prefData.data.reduce(
-                (sum: number, item: { price: number }) => sum + item.price,
-                0
-              ) / prefData.data.length;
-            nationalPrices.push(averagePrice);
+        // キャッシュに全データを保存
+        const newCache: { [key: string]: EstateTransactionResponse } = {};
+
+        allPrefData.forEach((data, index) => {
+          // データが正しいか確認
+          if (data && data.data) {
+            newCache[`${index + 1}-${selectedYear}-${displayType}`] = data; // 正しいキーでキャッシュに保存
           }
-        }
+        });
 
-        // 全国平均を計算
-        const totalNationalAverage =
-          nationalPrices.length > 0
-            ? nationalPrices.reduce((sum, price) => sum + price, 0) /
-              nationalPrices.length
+        setCache(newCache);
+
+        // 全国平均価格を計算
+        const allPrices = allPrefData.flatMap((data) =>
+          data.data.map((item) => item.price)
+        );
+        const avgPrice =
+          allPrices.length > 0
+            ? allPrices.reduce((sum, price) => sum + price, 0) /
+              allPrices.length
             : 0;
 
-        setNationalAveragePrice(totalNationalAverage);
+        setAveragePrice(avgPrice);
+
+        // 東京都のデータを取得
+        const tokyoData = allPrefData[0]; // 東京都のデータを取得
+        setPriceData(tokyoData);
       } catch (err) {
+        console.error("データの取得エラー:", err);
         setError("データの取得に失敗しました。");
       }
     };
 
-    fetchData();
-  }, [prefCode, selectedYear, displayType]);
+    fetchInitialData();
+  }, [selectedYear, displayType]); // 初期データ取得時に依存
+
+  // データ取得のハンドラー
+  useEffect(() => {
+    const cacheKey = `${prefCode}-${selectedYear}-${displayType}`; // キャッシュキーを作成
+
+    if (cache[cacheKey]) {
+      // キャッシュからデータを取得
+      setPriceData(cache[cacheKey]);
+      setError(null); // エラーをリセット
+    } else {
+      // キャッシュにデータがない場合の処理
+      setError("キャッシュにデータがありません。");
+    }
+  }, [prefCode, selectedYear, displayType, cache]);
 
   // 年度変更ハンドラー
   const handleYearChange = (year: number) => {
@@ -108,8 +121,8 @@ const DataDisplayArea: React.FC = () => {
                 ))}
               </ul>
               {/* 全国平均取引価格を表示 */}
-              <h4 className="mt-4 text-lg">全国平均取引価格:</h4>
-              <p>{`${nationalAveragePrice?.toFixed(2) || 0} 円/㎡`}</p>
+              <p>東京都の価格: {priceData.data[0]?.price} 円/㎡</p>
+              <p>全国平均の価格: {averagePrice.toFixed(2)} 円/㎡</p>
             </div>
           ) : (
             <p>データを取得しています...</p>
