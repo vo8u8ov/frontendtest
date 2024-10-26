@@ -142,7 +142,14 @@ const DataDisplayArea: React.FC = () => {
     datasets: [
       {
         label: "取引価格 (円/㎡)",
-        data: [priceData ? priceData.years[0].value : 0, averagePrice], // 仮
+        // selectedYear に基づいて価格を取得
+        data: [
+          estateData
+            ? estateData.years.find((year) => year.year === selectedYear)
+                ?.value || 0
+            : 0,
+          averagePrice,
+        ],
         backgroundColor: ["#4C9F70", "#FF6347"],
       },
     ],
