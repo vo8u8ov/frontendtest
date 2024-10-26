@@ -1,12 +1,10 @@
 // src/api.ts
 import { EstateTransactionResponse } from "./types";
 import prefecturesData from "./prefecturesData";
-// const BASE_URL = "https://opendata.resas-portal.go.jp/api/v1";
-// const API_KEY = "76kvWSYLuEnBPH9z7TGFZsVwOiORa38Z2HVlZVpa"; // APIキーを設定
 
+// 都道府県の年度データを取得する関数
 export const fetchEstateTransactionData = async (
   prefCode: number,
-  year: number,
   displayType: number
 ): Promise<EstateTransactionResponse> => {
   // データをフィルタリング
@@ -27,24 +25,17 @@ export const fetchEstateTransactionData = async (
   }
 
   // 年データを取得
-  const yearData = filteredData.years.find((item) => item.year === year);
-
-  if (!yearData) {
-    throw new Error("指定された年度のデータが見つかりません");
-  }
+  const yearsData = filteredData.years; // 対応する年度のデータを取得
 
   // 成果物を返す
   const result: EstateTransactionResponse = {
-    year: yearData.year, // 年度
-    data: [{ year: yearData.year, price: yearData.value }], // 年度と値の配列
-    averagePrice: undefined, // 必要に応じて平均価格を設定
+    prefCode: filteredData.prefCode,
+    displayType: filteredData.displayType,
+    years: yearsData.map((yearData) => ({
+      year: yearData.year, // 年度
+      value: yearData.value, // 価格
+    })),
   };
 
-  // ダミーデータをローカルストレージに保存
-  localStorage.setItem(
-    `${prefCode}-${year}-${displayType}`,
-    JSON.stringify(result)
-  );
-
-  return result;
+  return result; // 指定されたprefCodeとdisplayTypeに関連する全年度のデータを返す
 };

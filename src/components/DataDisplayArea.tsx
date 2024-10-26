@@ -50,28 +50,24 @@ const DataDisplayArea: React.FC = () => {
       const fetchAndCacheData = async () => {
         try {
           // 選択都道府県データの取得
-          const data = await fetchEstateTransactionData(
-            prefCode,
-            selectedYear,
-            displayType
-          );
+          const data = await fetchEstateTransactionData(prefCode, displayType);
           setPriceData(data);
           setCache((prevCache) => ({ ...prevCache, [cacheKey]: data }));
+          console.log("DATA:", data);
+          // // 全国データを取得して平均計算
+          // const allPrefDataPromises = Array.from({ length: 2 }, (_, i) =>
+          //   fetchEstateTransactionData(i + 1, displayType)
+          // );
+          // const allPrefData = await Promise.all(allPrefDataPromises);
 
-          // 全国データを取得して平均計算
-          const allPrefDataPromises = Array.from({ length: 2 }, (_, i) =>
-            fetchEstateTransactionData(i + 1, selectedYear, displayType)
-          );
-          const allPrefData = await Promise.all(allPrefDataPromises);
+          // // 全国平均価格を計算
+          // const totalValue = allPrefData.reduce((sum, prefData) => {
+          //   return sum + (prefData.data[0]?.price || 0);
+          // }, 0);
+          // const avgPrice = totalValue / 47; // 都道府県数で割って平均を出す
+          // setAveragePrice(avgPrice);
 
-          // 全国平均価格を計算
-          const totalValue = allPrefData.reduce((sum, prefData) => {
-            return sum + (prefData.data[0]?.price || 0);
-          }, 0);
-          const avgPrice = totalValue / 47; // 都道府県数で割って平均を出す
-          setAveragePrice(avgPrice);
-
-          setError(null);
+          // setError(null);
         } catch (err) {
           console.error("データ取得エラー:", err);
           setError("キャッシュにデータがありません。");
@@ -120,7 +116,7 @@ const DataDisplayArea: React.FC = () => {
     datasets: [
       {
         label: "取引価格 (円/㎡)",
-        data: [priceData ? priceData.data[0]?.price : 0, averagePrice],
+        data: [priceData ? priceData.years[0].value : 0, averagePrice], // 仮
         backgroundColor: ["#4C9F70", "#FF6347"],
       },
     ],
