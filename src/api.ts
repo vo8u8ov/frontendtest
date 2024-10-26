@@ -34,8 +34,17 @@ export const fetchEstateTransactionData = async (
   }
 
   // 成果物を返す
-  return {
-    year: yearData.year,
-    data: [{ year: yearData.year, price: yearData.value }],
+  const result: EstateTransactionResponse = {
+    year: yearData.year, // 年度
+    data: [{ year: yearData.year, price: yearData.value }], // 年度と値の配列
+    averagePrice: undefined, // 必要に応じて平均価格を設定
   };
+
+  // ダミーデータをローカルストレージに保存
+  localStorage.setItem(
+    `${prefCode}-${year}-${displayType}`,
+    JSON.stringify(result)
+  );
+
+  return result;
 };
