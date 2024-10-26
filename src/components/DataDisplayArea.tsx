@@ -29,7 +29,7 @@ const DataDisplayArea: React.FC = () => {
         setPriceData(data);
 
         // 全国平均の計算用に全ての都道府県のデータを取得
-        const allPrefCodes = [1, 2, 3, 4, 5]; // 他の都道府県コードを必要に応じて追加
+        const allPrefCodes = Array.from({ length: 47 }, (_, i) => i + 1);
         const nationalPrices: number[] = [];
 
         for (const code of allPrefCodes) {
