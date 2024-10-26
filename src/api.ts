@@ -2,7 +2,7 @@ import { EstateTransactionResponse } from "./types";
 
 // src/api.ts
 const BASE_URL = "https://opendata.resas-portal.go.jp/api/v1";
-const API_KEY = "76kvWSYLuEnBPH9z7TGFZsVwOiORa38Z2HVlZVpa"; // APIキーを設定
+const API_KEY = ""; // APIキーを設定
 
 export const fetchEstateTransactionData = async (
   prefCode: number,
