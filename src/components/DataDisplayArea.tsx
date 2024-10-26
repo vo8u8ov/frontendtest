@@ -31,7 +31,7 @@ const DataDisplayArea: React.FC = () => {
   const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
     null
   );
-  // const [averagePrice, setAveragePrice] = useState<number>(0);
+  const [averagePrice, setAveragePrice] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [cache, setCache] = useState<{
     [key: string]: EstateTransactionResponse;
@@ -46,21 +46,29 @@ const DataDisplayArea: React.FC = () => {
       setPriceData(cache[cacheKey]);
       setError(null); // エラーをリセット
     } else {
-      // キャッシュにデータがない場合のみAPI呼び出しとエラーメッセージ設定
       const fetchAndCacheData = async () => {
         try {
+          // 選択都道府県データの取得
           const data = await fetchEstateTransactionData(
             prefCode,
             selectedYear,
             displayType
           );
           setPriceData(data);
+          setCache((prevCache) => ({ ...prevCache, [cacheKey]: data }));
 
-          // キャッシュに新たに保存
-          setCache((prevCache) => ({
-            ...prevCache,
-            [cacheKey]: data,
-          }));
+          // 全国データを取得して平均計算
+          const allPrefDataPromises = Array.from({ length: 2 }, (_, i) =>
+            fetchEstateTransactionData(i + 1, selectedYear, displayType)
+          );
+          const allPrefData = await Promise.all(allPrefDataPromises);
+
+          // 全国平均価格を計算
+          const totalValue = allPrefData.reduce((sum, prefData) => {
+            return sum + (prefData.data[0]?.price || 0);
+          }, 0);
+          const avgPrice = totalValue / 47; // 都道府県数で割って平均を出す
+          setAveragePrice(avgPrice);
 
           setError(null);
         } catch (err) {
@@ -94,7 +102,7 @@ const DataDisplayArea: React.FC = () => {
     datasets: [
       {
         label: "取引価格 (円/㎡)",
-        data: [priceData ? priceData.data[0]?.price : 0],
+        data: [priceData ? priceData.data[0]?.price : 0, averagePrice],
         backgroundColor: ["#4C9F70", "#FF6347"],
       },
     ],
