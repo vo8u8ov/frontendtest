@@ -26,6 +26,7 @@ ChartJS.register(
 
 const DataDisplayArea: React.FC = () => {
   const [prefCode, setPrefCode] = useState<number>(1);
+  const [prefName, setPrefName] = useState<string>("北海道");
   const [selectedYear, setSelectedYear] = useState<number>(2009);
   const [displayType, setDisplayType] = useState<number>(1);
   const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
@@ -39,7 +40,7 @@ const DataDisplayArea: React.FC = () => {
 
   // データ取得のハンドラー
   useEffect(() => {
-    const cacheKey = `${prefCode}-${selectedYear}-${displayType}`; // キャッシュキーを作成
+    const cacheKey = `${prefCode}-${prefName}-${selectedYear}-${displayType}`; // キャッシュキーを作成
 
     if (cache[cacheKey]) {
       // キャッシュからデータを取得
@@ -79,7 +80,7 @@ const DataDisplayArea: React.FC = () => {
 
       fetchAndCacheData();
     }
-  }, [prefCode, selectedYear, displayType, cache]);
+  }, [prefCode, prefName, selectedYear, displayType, cache]);
 
   // 年度変更ハンドラー
   const handleYearChange = (year: number) => {
@@ -91,6 +92,10 @@ const DataDisplayArea: React.FC = () => {
     setPrefCode(prefCode);
   };
 
+  const handlePrefNameChange = (prefName: string) => {
+    setPrefName(prefName);
+  };
+
   // 表示タイプ変更ハンドラー
   const handleDisplayTypeChange = (type: number) => {
     setDisplayType(type);
@@ -98,7 +103,6 @@ const DataDisplayArea: React.FC = () => {
 
   const displayTypeText =
     displayType === 1 ? "住宅地" : displayType === 2 ? "商業地" : "";
-  const prefName = `${prefCode}`;
 
   // グラフのデータと設定
   const chartData = {
@@ -190,9 +194,11 @@ const DataDisplayArea: React.FC = () => {
           {/* UIPanelをリスポンシブにする */}
           <UIPanel
             prefCode={prefCode}
+            prefName={prefName}
             selectedYear={selectedYear}
             displayType={displayType}
             handlePrefChange={handlePrefChange}
+            handlePrefNameChange={handlePrefNameChange}
             handleYearChange={handleYearChange}
             handleDisplayTypeChange={handleDisplayTypeChange}
           />

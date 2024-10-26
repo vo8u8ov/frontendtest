@@ -5,9 +5,11 @@ import { prefectures } from "../prefectures";
 
 interface UIPanelProps {
   prefCode: number;
+  prefName: string;
   selectedYear: number;
   displayType: number;
   handlePrefChange: (prefCode: number) => void;
+  handlePrefNameChange: (prefName: string) => void;
   handleYearChange: (year: number) => void;
   handleDisplayTypeChange: (type: number) => void;
 }
@@ -65,9 +67,18 @@ const UIPanel: React.FC<UIPanelProps> = ({
   selectedYear,
   displayType,
   handlePrefChange,
+  handlePrefNameChange,
   handleYearChange,
   handleDisplayTypeChange,
 }) => {
+  // 都道府県コードが変更された時の処理
+  const handlePrefChangeWithPrefName = (code: number) => {
+    handlePrefChange(code);
+    const selectedPref = prefectures.find((pref) => pref.code === code);
+    if (selectedPref) {
+      handlePrefNameChange(selectedPref.name); // 日本語名を渡す
+    }
+  };
   return (
     <div className="w-full border bg-gray-700  p-4 rounded-lg">
       {/* 表示内容を選択 */}
@@ -80,7 +91,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <label className="w-1/3 mr-2">場所</label>
         <select
           value={prefCode}
-          onChange={(e) => handlePrefChange(Number(e.target.value))}
+          onChange={(e) => handlePrefChangeWithPrefName(Number(e.target.value))}
           className="border border-gray-300 p-2 bg-gray-600 w-2/3"
         >
           {prefectures.map((pref) => (
