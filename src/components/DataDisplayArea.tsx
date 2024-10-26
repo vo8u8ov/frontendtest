@@ -102,7 +102,17 @@ const DataDisplayArea: React.FC = () => {
   };
 
   const displayTypeText =
-    displayType === 1 ? "住宅地" : displayType === 2 ? "商業地" : "";
+    displayType === 1
+      ? "土地(住宅地)"
+      : displayType === 2
+      ? "土地(商業地)"
+      : displayType === 3
+      ? "中古マンション等"
+      : displayType === 4
+      ? "農地"
+      : displayType === 5
+      ? "林地"
+      : "";
 
   // グラフのデータと設定
   const chartData = {
