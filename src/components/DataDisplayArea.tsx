@@ -203,13 +203,12 @@ const DataDisplayArea: React.FC = () => {
         <hr className="my-2 border-gray-600" />
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between mt-4">
-        <div className="flex-grow">
-          <h2 className="text-lg">データ表示エリア（チャートなど）</h2>
+      <div className="flex flex-col sm:flex-row justify-between mt-4 items-center">
+        <div className="flex-grow flex justify-center">
           {error ? (
             <p className="text-red-500">{error}</p>
           ) : (
-            <div style={{ width: "80%", height: "300px" }}>
+            <div style={{ width: "50%", height: "500px" }}>
               <Bar data={chartData} options={chartOptions} />
             </div>
           )}
