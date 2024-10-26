@@ -1,8 +1,28 @@
 // DataDisplayArea.tsx
 import React, { useState, useEffect } from "react";
 import UIPanel from "./UIPanel";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { fetchEstateTransactionData } from "../api";
 import { EstateTransactionResponse } from "../types";
+
+// Chart.jsのコンポーネントを登録
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const DataDisplayArea: React.FC = () => {
   const [prefCode, setPrefCode] = useState<number>(1);
@@ -114,6 +134,31 @@ const DataDisplayArea: React.FC = () => {
     setDisplayType(type);
   };
 
+  // グラフのデータと設定
+  const chartData = {
+    labels: ["選択した都道府県", "全国平均"],
+    datasets: [
+      {
+        label: "取引価格 (円/㎡)",
+        data: [priceData ? priceData.data[0]?.price : 0, averagePrice],
+        backgroundColor: ["#4C9F70", "#FF6347"],
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: `${selectedYear}年の取引価格`,
+      },
+    },
+  };
+
   return (
     <div className="flex flex-col p-4">
       {/* 取引価格セクション */}
@@ -128,26 +173,13 @@ const DataDisplayArea: React.FC = () => {
 
       <div className="flex flex-col sm:flex-row justify-between mt-4">
         <div className="flex-grow">
-          {/* 価格データ表示 */}
           <h2 className="text-lg">データ表示エリア（チャートなど）</h2>
           {error ? (
             <p className="text-red-500">{error}</p>
-          ) : priceData ? (
-            <div>
-              <p>年度: {priceData.year}</p>
-              <ul>
-                {priceData.data.map((item) => (
-                  <li key={item.year}>
-                    {item.year}: {item.price} 円/㎡
-                  </li>
-                ))}
-              </ul>
-              {/* 全国平均取引価格を表示 */}
-              <p>東京都の価格: {priceData.data[0]?.price} 円/㎡</p>
-              <p>全国平均の価格: {averagePrice.toFixed(2)} 円/㎡</p>
-            </div>
           ) : (
-            <p>データを取得しています...</p>
+            <div>
+              <Bar data={chartData} options={chartOptions} />
+            </div>
           )}
         </div>
         <div className="w-full sm:w-1/4">
