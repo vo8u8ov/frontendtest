@@ -6,10 +6,10 @@ import { prefectures } from "../prefectures";
 interface UIPanelProps {
   prefCode: number;
   selectedYear: number;
-  displayType: string;
+  displayType: number;
   handlePrefChange: (prefCode: number) => void;
   handleYearChange: (year: number) => void;
-  handleDisplayTypeChange: (type: string) => void;
+  handleDisplayTypeChange: (type: number) => void;
 }
 
 const MapIcon = () => (
@@ -117,8 +117,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
             <input
               type="radio"
               value="landResidential"
-              checked={displayType === "landResidential"}
-              onChange={() => handleDisplayTypeChange("landResidential")}
+              checked={displayType === 1}
+              onChange={() => handleDisplayTypeChange(1)}
               className="mr-2"
             />
             土地(住宅地)
@@ -127,8 +127,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
             <input
               type="radio"
               value="landCommercial"
-              checked={displayType === "landCommercial"}
-              onChange={() => handleDisplayTypeChange("landCommercial")}
+              checked={displayType === 2}
+              onChange={() => handleDisplayTypeChange(2)}
               className="mr-2"
             />
             土地(商業地)
@@ -137,8 +137,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
             <input
               type="radio"
               value="usedApartment"
-              checked={displayType === "usedApartment"}
-              onChange={() => handleDisplayTypeChange("usedApartment")}
+              checked={displayType === 3}
+              onChange={() => handleDisplayTypeChange(3)}
               className="mr-2"
             />
             中古マンション等
@@ -147,8 +147,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
             <input
               type="radio"
               value="farmland"
-              checked={displayType === "farmland"}
-              onChange={() => handleDisplayTypeChange("farmland")}
+              checked={displayType === 4}
+              onChange={() => handleDisplayTypeChange(4)}
               className="mr-2"
             />
             農地
@@ -157,8 +157,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
             <input
               type="radio"
               value="forestLand"
-              checked={displayType === "forestLand"}
-              onChange={() => handleDisplayTypeChange("forestLand")}
+              checked={displayType === 5}
+              onChange={() => handleDisplayTypeChange(5)}
               className="mr-2"
             />
             林地

@@ -1,19 +1,20 @@
+// src/api.ts
 import { EstateTransactionResponse } from "./types";
 
-// src/api.ts
 const BASE_URL = "https://opendata.resas-portal.go.jp/api/v1";
-const API_KEY = ""; // APIキーを設定
+const API_KEY = "76kvWSYLuEnBPH9z7TGFZsVwOiORa38Z2HVlZVpa"; // APIキーを設定
 
 export const fetchEstateTransactionData = async (
   prefCode: number,
-  year: number
+  year: number,
+  displayType: number
 ): Promise<EstateTransactionResponse> => {
   try {
     const response = await fetch(
-      `https://opendata.resas-portal.go.jp/api/v1/townPlanning/estateTransaction/bar?prefCode=${prefCode}&year=${year}`,
+      `${BASE_URL}/townPlanning/estateTransaction/bar?prefCode=${prefCode}&year=${year}&displayType=${displayType}`,
       {
         headers: {
-          "X-API-KEY": "YOUR_API_KEY_HERE", // 自分のAPIキーをここに挿入
+          "X-API-KEY": API_KEY,
         },
       }
     );
@@ -23,19 +24,20 @@ export const fetchEstateTransactionData = async (
     }
 
     const data = await response.json();
+    console.log(data);
 
-    if (data && data.result) {
-      // ここでAPIレスポンスの構造に従って必要なデータを取得
+    // APIレスポンスが期待通りか確認
+    if (data && data.result && data.result.years) {
       const yearData = data.result.years.map(
         (item: { year: number; value: number }) => ({
-          year: item.year, // 年度
-          price: item.value, // 不動産取引価格(面積あたり平均価格)
+          year: item.year,
+          price: item.value,
         })
       );
 
       return {
-        year: data.result.year,
-        data: yearData, // 整形したデータを返す
+        year,
+        data: yearData,
       };
     } else {
       throw new Error("データが不正です");

@@ -1,36 +1,36 @@
 // DataDisplayArea.tsx
 import React, { useState, useEffect } from "react";
 import UIPanel from "./UIPanel";
-
-const data = [
-  {
-    prefCode: 1,
-    year: 2009,
-    type: "landResidential",
-    pricePerSquareMeter: 50000,
-  },
-  {
-    prefCode: 1,
-    year: 2010,
-    type: "landResidential",
-    pricePerSquareMeter: 52000,
-  },
-  {
-    prefCode: 2,
-    year: 2009,
-    type: "landCommercial",
-    pricePerSquareMeter: 75000,
-  },
-  // ここに他のデータも追加できます
-];
+import { fetchEstateTransactionData } from "../api";
+import { EstateTransactionResponse } from "../types";
 
 const DataDisplayArea: React.FC = () => {
   const [prefCode, setPrefCode] = useState<number>(1);
   const [selectedYear, setSelectedYear] = useState<number>(2009);
-  const [displayType, setDisplayType] = useState<string>("landResidential");
-  const [pricePerSquareMeter, setPricePerSquareMeter] = useState<number | null>(
+  const [displayType, setDisplayType] = useState<number>(1);
+  const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
     null
   );
+  const [error, setError] = useState<string | null>(null);
+
+  // データ取得のハンドラー
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setError(null); // エラーをリセット
+        const data = await fetchEstateTransactionData(
+          prefCode,
+          selectedYear,
+          displayType
+        );
+        setPriceData(data);
+      } catch (err) {
+        setError("データの取得に失敗しました。");
+      }
+    };
+
+    fetchData();
+  }, [prefCode, selectedYear, displayType]);
 
   // 年度変更ハンドラー
   const handleYearChange = (year: number) => {
@@ -43,20 +43,9 @@ const DataDisplayArea: React.FC = () => {
   };
 
   // 表示タイプ変更ハンドラー
-  const handleDisplayTypeChange = (type: string) => {
+  const handleDisplayTypeChange = (type: number) => {
     setDisplayType(type);
   };
-
-  // データ取得関数
-  useEffect(() => {
-    const result = data.find(
-      (entry) =>
-        entry.prefCode === prefCode &&
-        entry.year === selectedYear &&
-        entry.type === displayType
-    );
-    setPricePerSquareMeter(result ? result.pricePerSquareMeter : null);
-  }, [prefCode, selectedYear, displayType]);
 
   return (
     <div className="flex flex-col p-4">
@@ -71,10 +60,26 @@ const DataDisplayArea: React.FC = () => {
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between mt-4">
-        <h3>
-          選択した条件の取引価格:{" "}
-          {pricePerSquareMeter ? `${pricePerSquareMeter} 円/㎡` : "データなし"}
-        </h3>
+        <div className="flex-grow">
+          {/* 価格データ表示 */}
+          <h2 className="text-lg">データ表示エリア（チャートなど）</h2>
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : priceData ? (
+            <div>
+              <p>年度: {priceData.year}</p>
+              <ul>
+                {priceData.data.map((item) => (
+                  <li key={item.year}>
+                    {item.year}: {item.price} 円/㎡
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p>データを取得しています...</p>
+          )}
+        </div>
         <div className="w-full sm:w-1/4">
           {" "}
           {/* UIPanelをリスポンシブにする */}
