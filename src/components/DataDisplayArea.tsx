@@ -11,6 +11,9 @@ const DataDisplayArea: React.FC = () => {
   const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
     null
   );
+  const [nationalAveragePrice, setNationalAveragePrice] = useState<
+    number | null
+  >(null);
   const [error, setError] = useState<string | null>(null);
 
   // データ取得のハンドラー
@@ -24,6 +27,35 @@ const DataDisplayArea: React.FC = () => {
           displayType
         );
         setPriceData(data);
+
+        // 全国平均の計算用に全ての都道府県のデータを取得
+        const allPrefCodes = [1, 2, 3, 4, 5]; // 他の都道府県コードを必要に応じて追加
+        const nationalPrices: number[] = [];
+
+        for (const code of allPrefCodes) {
+          const prefData = await fetchEstateTransactionData(
+            code,
+            selectedYear,
+            displayType
+          );
+          if (prefData && prefData.data.length > 0) {
+            const averagePrice =
+              prefData.data.reduce(
+                (sum: number, item: { price: number }) => sum + item.price,
+                0
+              ) / prefData.data.length;
+            nationalPrices.push(averagePrice);
+          }
+        }
+
+        // 全国平均を計算
+        const totalNationalAverage =
+          nationalPrices.length > 0
+            ? nationalPrices.reduce((sum, price) => sum + price, 0) /
+              nationalPrices.length
+            : 0;
+
+        setNationalAveragePrice(totalNationalAverage);
       } catch (err) {
         setError("データの取得に失敗しました。");
       }
@@ -75,6 +107,9 @@ const DataDisplayArea: React.FC = () => {
                   </li>
                 ))}
               </ul>
+              {/* 全国平均取引価格を表示 */}
+              <h4 className="mt-4 text-lg">全国平均取引価格:</h4>
+              <p>{`${nationalAveragePrice?.toFixed(2) || 0} 円/㎡`}</p>
             </div>
           ) : (
             <p>データを取得しています...</p>
