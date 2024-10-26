@@ -204,7 +204,6 @@ const DataDisplayArea: React.FC = () => {
           {/* UIPanelをリスポンシブにする */}
           <UIPanel
             prefCode={prefCode}
-            prefName={prefName}
             selectedYear={selectedYear}
             displayType={displayType}
             handlePrefChange={handlePrefChange}

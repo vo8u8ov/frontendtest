@@ -5,7 +5,6 @@ import { prefectures } from "../prefectures";
 
 interface UIPanelProps {
   prefCode: number;
-  prefName: string;
   selectedYear: number;
   displayType: number;
   handlePrefChange: (prefCode: number) => void;
