@@ -137,10 +137,19 @@ const DataDisplayArea: React.FC = () => {
             size: 12,
           },
         },
+        grid: {
+          drawOnChartArea: false, // グリッド線をチャートエリアには描画しない
+          color: "rgba(255, 255, 255, 1)", // グリッド線の色を白に設定
+          lineWidth: 1, // グリッド線の太さを設定
+        },
         ticks: {
           font: {
             size: 10,
           },
+        },
+        border: {
+          color: "rgba(255, 255, 255, 1)", // Y軸の外側の線の色
+          width: 1, // Y軸の外側の線の太さ
         },
       },
       x: {
@@ -148,6 +157,10 @@ const DataDisplayArea: React.FC = () => {
           font: {
             size: 10,
           },
+        },
+        border: {
+          color: "rgba(255, 255, 255, 1)", // X軸の外側の線の色
+          width: 1, // X軸の外側の線の太さ
         },
       },
     },
