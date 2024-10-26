@@ -117,19 +117,14 @@ const DataDisplayArea: React.FC = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as const,
-        labels: {
-          font: {
-            size: 10,
-          },
-        },
+        display: false, // 凡例を非表示
       },
     },
     scales: {
       y: {
         title: {
           display: true,
-          text: "取引価格 (円/㎡)",
+          text: "円/㎡",
           font: {
             size: 12,
           },
