@@ -192,26 +192,29 @@ const DataDisplayArea: React.FC = () => {
           },
         },
         grid: {
-          color: "rgba(255, 255, 255, 0.2)", // 白い線
-          borderDash: [4, 4], // 破線スタイル
-          tickLength: 5, // メモリごとの短い線の長さ
+          drawOnChartArea: false, // グリッド線をチャートエリアには描画しない
+          color: "rgba(255, 255, 255, 1)", // グリッド線の色を白に設定
+          lineWidth: 1, // グリッド線の太さを設定
         },
         ticks: {
-          color: "white",
           font: {
             size: 10,
           },
+        },
+        border: {
+          color: "rgba(255, 255, 255, 1)", // Y軸の外側の線の色
+          width: 1, // Y軸の外側の線の太さ
         },
       },
       x: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.2)", // X軸の白い線
-        },
         ticks: {
-          color: "white",
           font: {
             size: 10,
           },
+        },
+        border: {
+          color: "rgba(255, 255, 255, 1)", // X軸の外側の線の色
+          width: 1, // X軸の外側の線の太さ
         },
       },
     },
