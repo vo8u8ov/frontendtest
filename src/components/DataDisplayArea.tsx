@@ -58,6 +58,32 @@ const DataDisplayArea: React.FC = () => {
               if (!apiData) {
                 console.log("データがないため保存:", i);
                 await saveDataToFirebase(i, displayType, selectedYear);
+
+                // Firebaseから最新データを再取得
+                const latestApiData = await fetchDataFromFirebase(
+                  i,
+                  displayType,
+                  selectedYear
+                );
+
+                console.log("latestApiData:", latestApiData);
+                if (!latestApiData) {
+                  console.error("取得したデータがnullまたはundefinedです。");
+                } else {
+                  // latestApiDataが存在すればそれを使用、存在しなければデフォルトのオブジェクトを使用
+                  allPrefData[i] = latestApiData;
+
+                  // localStorageにはlatestApiDataを保存
+                  localStorage.setItem(
+                    `prefData_${i}_${displayType}_${selectedYear}`,
+                    JSON.stringify(allPrefData[i]) // allPrefData[i]を保存
+                  );
+
+                  console.log(
+                    "APIからデータ取得してローカルストレージに保存:",
+                    i
+                  );
+                }
               } else {
                 allPrefData[i] = apiData;
                 localStorage.setItem(
