@@ -75,6 +75,23 @@ const DataDisplayArea: React.FC = () => {
 
         // すべての都道府県のデータ取得の完了を待つ
         await Promise.all(fetchPromises);
+        console.log("都道府県データ：", allPrefData);
+
+        // 全国平均の計算
+        let totalValue = 0;
+
+        for (let i = 1; i <= 47; i++) {
+          const yearData = allPrefData[i]?.years.find(
+            (year) => year.year === selectedYear
+          );
+          if (yearData?.value) {
+            totalValue += yearData.value;
+          }
+        }
+
+        let averagePrice = totalValue / 47;
+        setAveragePrice(averagePrice);
+        console.log("平均価格", averagePrice);
 
         // 現在選択されている都道府県のデータを取得
         if (allPrefData[prefCode]) {
