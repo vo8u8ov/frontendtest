@@ -3,6 +3,33 @@ import { database } from "./firebase"; // firebaseモジュールのインポー
 import { ref, set, get } from "firebase/database";
 import { YearData, EstateTransactionResponse } from "./types"; // 追加: 型をインポート
 
+let cachedApiKey: string | null = null;
+
+// FirebaseからAPIキーを取得する関数
+export const fetchApiKeyFromFirebase = async (): Promise<string | null> => {
+  if (cachedApiKey) {
+    console.log("キャッシュされたAPIキーを使用します:", cachedApiKey);
+    return cachedApiKey; // キャッシュからAPIキーを返す
+  }
+
+  try {
+    const apiKeyRef = ref(database, "config/apiKeys/resasapi");
+    const snapshot = await get(apiKeyRef);
+
+    if (snapshot.exists()) {
+      cachedApiKey = snapshot.val(); // 取得したAPIキーをキャッシュする
+      console.log("取得したAPIキー:", cachedApiKey);
+      return cachedApiKey;
+    } else {
+      console.log("APIキーが見つかりませんでした。");
+      return null;
+    }
+  } catch (error) {
+    console.error("APIキーの取得中にエラーが発生しました:", error);
+    return null;
+  }
+};
+
 // データをFirebaseに保存する関数
 export const saveDataToFirebase = async (
   prefCode: number, // prefCodeの型を確認
@@ -11,14 +38,20 @@ export const saveDataToFirebase = async (
 ) => {
   console.log("saveDataToFirebase実行");
   console.log("prefCode:", prefCode, " displayType:", displayType);
+
+  // APIキーをFirebaseから取得
+  const apiKey = await fetchApiKeyFromFirebase();
+  if (!apiKey) {
+    console.error("APIキーが取得できませんでした。処理を中断します。");
+    return; // APIキーがない場合は処理を中断
+  }
+
   // APIを呼び出してデータを取得
   const response = await fetch(
     `https://opendata.resas-portal.go.jp/api/v1/townPlanning/estateTransaction/bar?year=${year}&prefCode=${prefCode}&displayType=${displayType}`,
     {
       headers: {
-        "X-API-KEY":
-          process.env.REACT_APP_RESAS_API_KEY ||
-          "エラー: APIキーが設定されていません",
+        "X-API-KEY": apiKey || "エラー: APIキーが設定されていません",
       },
     }
   );
