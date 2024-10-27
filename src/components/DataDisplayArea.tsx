@@ -38,15 +38,38 @@ const DataDisplayArea: React.FC = () => {
     const fetchAndCacheData = async () => {
       try {
         console.log("トライ");
-        const cachedData = await fetchDataFromFirebase(
+
+        // すべての都道府県データを取得
+        const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
+          async (i) => {
+            const cachedData = await fetchDataFromFirebase(
+              i,
+              displayType,
+              selectedYear
+            );
+            if (!cachedData) {
+              console.log("データがないため保存:", i);
+              await saveDataToFirebase(i, displayType, selectedYear);
+            } else {
+              console.log("データ有り:", cachedData);
+            }
+          }
+        );
+
+        // すべての都道府県のデータ取得の完了を待つ
+        await Promise.all(fetchPromises);
+
+        // 現在選択されている都道府県のデータを取得
+        const currentPrefData = await fetchDataFromFirebase(
           prefCode,
           displayType,
           selectedYear
         );
-        if (cachedData) {
-          setEstateData(cachedData);
-          console.log("キャッシュデータを使用:", cachedData);
+        if (currentPrefData) {
+          setEstateData(currentPrefData);
+          console.log("キャッシュデータを使用:", currentPrefData);
         } else {
+          console.log("現在の都道府県のデータが見つからなかったため保存します");
           await saveDataToFirebase(prefCode, displayType, selectedYear);
           const apiData = await fetchDataFromFirebase(
             prefCode,
@@ -56,39 +79,9 @@ const DataDisplayArea: React.FC = () => {
           setEstateData(apiData);
           console.log("APIから取得したデータをFirebaseに保存:", apiData);
         }
-
-        // // calculateAveragePriceをuseEffect内で定義
-        // const calculateAveragePrice = async () => {
-        //   console.log("平均価格計算");
-        //   const allPrices: number[] = [];
-
-        //   // すべての都道府県データを取得
-        //   for (let i = 1; i <= 2; i++) {
-        //     const cachedData = await fetchDataFromFirebase(i, displayType);
-        //     if (cachedData) {
-        //       const value = cachedData.years.find(
-        //         (yearData) => yearData.year === selectedYear
-        //       )?.value;
-        //       if (value) {
-        //         allPrices.push(value);
-        //       }
-        //     }
-        //   }
-
-        //   // 全国平均価格を計算
-        //   const totalValue = allPrices.reduce((sum, price) => sum + price, 0);
-        //   const avgPrice =
-        //     allPrices.length > 0 ? totalValue / allPrices.length : 0; // 都道府県数で割って平均を出す
-        //   console.log("平均価格", avgPrice);
-        //   setAveragePrice(avgPrice);
-        //   setError(null);
-        // };
-
-        // // 全国平均価格を計算
-        // await calculateAveragePrice();
       } catch (err) {
         console.error("データ取得エラー:", err);
-        setError("キャッシュにデータがありません。");
+        setError("データ取得に失敗しました。");
       }
     };
 
