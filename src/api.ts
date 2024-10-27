@@ -48,17 +48,31 @@ export const saveDataToFirebase = async (
 // Firebaseからデータを取得する関数
 export const fetchDataFromFirebase = async (
   prefCode: number,
-  displayType: number
+  displayType: number,
+  year: number
 ): Promise<EstateTransactionResponse | null> => {
   console.log("fetchDataFromFirebase実行");
   const dataRef = ref(database, `prefectures/${prefCode}/${displayType}`);
   const snapshot = await get(dataRef);
 
   if (snapshot.exists()) {
-    console.log("取得したデータ:", snapshot.val());
-    return snapshot.val() as EstateTransactionResponse; // 型アサーションを追加
+    const data = snapshot.val() as EstateTransactionResponse;
+
+    // years配列から指定されたyearのデータを取得
+    const yearData = data.years.find((yearData) => yearData.year === year);
+
+    if (yearData) {
+      console.log("取得した年データ:", yearData);
+      return {
+        ...data,
+        years: [yearData], // 見つかった年データだけを含む新しいオブジェクトを返す
+      };
+    } else {
+      console.log("指定された年のデータが見つかりませんでした");
+      return null; // 指定された年のデータが見つからなかった場合
+    }
   } else {
     console.log("データが見つかりませんでした");
-    return null;
+    return null; // データが存在しない場合
   }
 };

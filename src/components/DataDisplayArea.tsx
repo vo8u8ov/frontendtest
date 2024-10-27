@@ -38,46 +38,54 @@ const DataDisplayArea: React.FC = () => {
     const fetchAndCacheData = async () => {
       try {
         console.log("トライ");
-        const cachedData = await fetchDataFromFirebase(prefCode, displayType);
+        const cachedData = await fetchDataFromFirebase(
+          prefCode,
+          displayType,
+          selectedYear
+        );
         if (cachedData) {
           setEstateData(cachedData);
           console.log("キャッシュデータを使用:", cachedData);
         } else {
           await saveDataToFirebase(prefCode, displayType, selectedYear);
-          const apiData = await fetchDataFromFirebase(prefCode, displayType);
+          const apiData = await fetchDataFromFirebase(
+            prefCode,
+            displayType,
+            selectedYear
+          );
           setEstateData(apiData);
           console.log("APIから取得したデータをFirebaseに保存:", apiData);
         }
 
-        // calculateAveragePriceをuseEffect内で定義
-        const calculateAveragePrice = async () => {
-          console.log("平均価格計算");
-          const allPrices: number[] = [];
+        // // calculateAveragePriceをuseEffect内で定義
+        // const calculateAveragePrice = async () => {
+        //   console.log("平均価格計算");
+        //   const allPrices: number[] = [];
 
-          // すべての都道府県データを取得
-          for (let i = 1; i <= 2; i++) {
-            const cachedData = await fetchDataFromFirebase(i, displayType);
-            if (cachedData) {
-              const value = cachedData.years.find(
-                (yearData) => yearData.year === selectedYear
-              )?.value;
-              if (value) {
-                allPrices.push(value);
-              }
-            }
-          }
+        //   // すべての都道府県データを取得
+        //   for (let i = 1; i <= 2; i++) {
+        //     const cachedData = await fetchDataFromFirebase(i, displayType);
+        //     if (cachedData) {
+        //       const value = cachedData.years.find(
+        //         (yearData) => yearData.year === selectedYear
+        //       )?.value;
+        //       if (value) {
+        //         allPrices.push(value);
+        //       }
+        //     }
+        //   }
 
-          // 全国平均価格を計算
-          const totalValue = allPrices.reduce((sum, price) => sum + price, 0);
-          const avgPrice =
-            allPrices.length > 0 ? totalValue / allPrices.length : 0; // 都道府県数で割って平均を出す
-          console.log("平均価格", avgPrice);
-          setAveragePrice(avgPrice);
-          setError(null);
-        };
+        //   // 全国平均価格を計算
+        //   const totalValue = allPrices.reduce((sum, price) => sum + price, 0);
+        //   const avgPrice =
+        //     allPrices.length > 0 ? totalValue / allPrices.length : 0; // 都道府県数で割って平均を出す
+        //   console.log("平均価格", avgPrice);
+        //   setAveragePrice(avgPrice);
+        //   setError(null);
+        // };
 
-        // 全国平均価格を計算
-        await calculateAveragePrice();
+        // // 全国平均価格を計算
+        // await calculateAveragePrice();
       } catch (err) {
         console.error("データ取得エラー:", err);
         setError("キャッシュにデータがありません。");
@@ -94,13 +102,7 @@ const DataDisplayArea: React.FC = () => {
 
   // 都道府県変更ハンドラー
   const handlePrefChange = (prefCode: number) => {
-    if (prefCode === 1) {
-      setPrefCode(1);
-      setPrefName("北海道");
-    } else if (prefCode === 2) {
-      setPrefCode(2);
-      setPrefName("青森");
-    }
+    setPrefCode(prefCode);
   };
 
   const handlePrefNameChange = (prefName: string) => {
