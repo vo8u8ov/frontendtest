@@ -40,18 +40,35 @@ const DataDisplayArea: React.FC = () => {
         console.log("トライ");
 
         // すべての都道府県データを取得
+        const allPrefData: Record<number, EstateTransactionResponse> = {};
         const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
           async (i) => {
-            const cachedData = await fetchDataFromFirebase(
-              i,
-              displayType,
-              selectedYear
+            const localData = localStorage.getItem(
+              `prefData_${i}_${displayType}_${selectedYear}`
             );
-            if (!cachedData) {
-              console.log("データがないため保存:", i);
-              await saveDataToFirebase(i, displayType, selectedYear);
+            if (localData) {
+              allPrefData[i] = JSON.parse(localData);
+              console.log("ローカルストレージからデータ取得:", i);
             } else {
-              console.log("データ有り:", cachedData);
+              const apiData = await fetchDataFromFirebase(
+                i,
+                displayType,
+                selectedYear
+              );
+              if (!apiData) {
+                console.log("データがないため保存:", i);
+                await saveDataToFirebase(i, displayType, selectedYear);
+              } else {
+                allPrefData[i] = apiData;
+                localStorage.setItem(
+                  `prefData_${i}_${displayType}_${selectedYear}`,
+                  JSON.stringify(apiData)
+                );
+                console.log(
+                  "APIからデータ取得してローカルストレージに保存:",
+                  i
+                );
+              }
             }
           }
         );
@@ -60,24 +77,25 @@ const DataDisplayArea: React.FC = () => {
         await Promise.all(fetchPromises);
 
         // 現在選択されている都道府県のデータを取得
-        const currentPrefData = await fetchDataFromFirebase(
-          prefCode,
-          displayType,
-          selectedYear
-        );
-        if (currentPrefData) {
-          setEstateData(currentPrefData);
-          console.log("キャッシュデータを使用:", currentPrefData);
+        if (allPrefData[prefCode]) {
+          setEstateData(allPrefData[prefCode]);
+          console.log("キャッシュデータを使用:", allPrefData[prefCode]);
         } else {
           console.log("現在の都道府県のデータが見つからなかったため保存します");
-          await saveDataToFirebase(prefCode, displayType, selectedYear);
           const apiData = await fetchDataFromFirebase(
             prefCode,
             displayType,
             selectedYear
           );
           setEstateData(apiData);
-          console.log("APIから取得したデータをFirebaseに保存:", apiData);
+          localStorage.setItem(
+            `prefData_${prefCode}_${displayType}_${selectedYear}`,
+            JSON.stringify(apiData)
+          );
+          console.log(
+            "APIから取得したデータをローカルストレージに保存:",
+            apiData
+          );
         }
       } catch (err) {
         console.error("データ取得エラー:", err);
