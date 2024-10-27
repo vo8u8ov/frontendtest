@@ -1,4 +1,3 @@
-// DataDisplayArea.tsx
 import React, { useState, useEffect } from "react";
 import UIPanel from "./UIPanel";
 import { Bar } from "react-chartjs-2";
@@ -11,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { fetchEstateTransactionData } from "../api";
+import { saveDataToFirebase, fetchDataFromFirebase } from "../api";
 import { EstateTransactionResponse } from "../types";
 
 // Chart.jsのコンポーネントを登録
@@ -29,9 +28,6 @@ const DataDisplayArea: React.FC = () => {
   const [prefName, setPrefName] = useState<string>("北海道");
   const [selectedYear, setSelectedYear] = useState<number>(2009);
   const [displayType, setDisplayType] = useState<number>(1);
-  const [priceData, setPriceData] = useState<EstateTransactionResponse | null>(
-    null
-  );
   const [estateData, setEstateData] =
     useState<EstateTransactionResponse | null>(null);
   const [averagePrice, setAveragePrice] = useState<number>(0);
@@ -39,70 +35,118 @@ const DataDisplayArea: React.FC = () => {
 
   // データ取得のハンドラー
   useEffect(() => {
-    const cacheKey = `${prefCode}-${displayType}`; // prefCodeとdisplayTypeだけを使用
-
-    // localStorageからデータを取得
-    const cachedData = localStorage.getItem(cacheKey);
-    if (cachedData) {
-      const parsedData: EstateTransactionResponse = JSON.parse(cachedData);
-      setEstateData(parsedData);
-      setError(null); // エラーをリセット
-      console.log("キャッシュデータを使用:", parsedData);
-      console.log("estateData:", estateData);
-
-      // 全国平均価格を計算
-      calculateAveragePrice();
-      return; // キャッシュがあるのでAPI呼び出し不要
-    }
-
     const fetchAndCacheData = async () => {
       try {
-        // 選択都道府県データの取得
-        const data = await fetchEstateTransactionData(prefCode, displayType);
-        setEstateData(data);
+        console.log("トライ");
 
-        // localStorageにデータを保存
-        localStorage.setItem(cacheKey, JSON.stringify(data));
-        console.log("DATA:", data);
+        // すべての都道府県データを取得
+        const allPrefData: Record<number, EstateTransactionResponse> = {};
+        const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
+          async (i) => {
+            const localData = localStorage.getItem(
+              `prefData_${i}_${displayType}_${selectedYear}`
+            );
+            if (localData) {
+              allPrefData[i] = JSON.parse(localData);
+              console.log("ローカルストレージからデータ取得:", i);
+            } else {
+              const apiData = await fetchDataFromFirebase(
+                i,
+                displayType,
+                selectedYear
+              );
+              if (!apiData) {
+                console.log("データがないため保存:", i);
+                await saveDataToFirebase(i, displayType, selectedYear);
 
-        // 全国平均価格を計算
-        calculateAveragePrice();
+                // Firebaseから最新データを再取得
+                const latestApiData = await fetchDataFromFirebase(
+                  i,
+                  displayType,
+                  selectedYear
+                );
+
+                console.log("latestApiData:", latestApiData);
+                if (latestApiData) {
+                  allPrefData[i] = latestApiData;
+
+                  // localStorageに最新データを保存
+                  localStorage.setItem(
+                    `prefData_${i}_${displayType}_${selectedYear}`,
+                    JSON.stringify(allPrefData[i]) // allPrefData[i]を保存
+                  );
+
+                  console.log(
+                    "APIからデータ取得してローカルストレージに保存:",
+                    i
+                  );
+                } else {
+                  console.error("取得したデータがnullまたはundefinedです。");
+                }
+              } else {
+                allPrefData[i] = apiData;
+                localStorage.setItem(
+                  `prefData_${i}_${displayType}_${selectedYear}`,
+                  JSON.stringify(apiData)
+                );
+                console.log(
+                  "APIからデータ取得してローカルストレージに保存:",
+                  i
+                );
+              }
+            }
+          }
+        );
+
+        // すべての都道府県のデータ取得の完了を待つ
+        await Promise.all(fetchPromises);
+        console.log("都道府県データ：", allPrefData);
+
+        // 全国平均の計算
+        let totalValue = 0;
+
+        for (let i = 1; i <= 47; i++) {
+          const yearData = allPrefData[i]?.years.find(
+            (year) => year.year === selectedYear
+          );
+          if (yearData?.value) {
+            totalValue += yearData.value;
+          }
+        }
+
+        let averagePrice = totalValue / 47;
+        setAveragePrice(averagePrice);
+        console.log("平均価格", averagePrice);
+
+        // 現在選択されている都道府県のデータを取得
+        if (allPrefData[prefCode]) {
+          setEstateData(allPrefData[prefCode]);
+          console.log("キャッシュデータを使用:", allPrefData[prefCode]);
+        } else {
+          console.log("現在の都道府県のデータが見つからなかったため保存します");
+          const apiData = await fetchDataFromFirebase(
+            prefCode,
+            displayType,
+            selectedYear
+          );
+          setEstateData(apiData);
+          localStorage.setItem(
+            `prefData_${prefCode}_${displayType}_${selectedYear}`,
+            JSON.stringify(apiData)
+          );
+          console.log(
+            "APIから取得したデータをローカルストレージに保存:",
+            apiData
+          );
+        }
       } catch (err) {
         console.error("データ取得エラー:", err);
-        setError("キャッシュにデータがありません。");
+        setError("データ取得に失敗しました。");
       }
     };
 
     fetchAndCacheData();
-  }, [prefCode, displayType]);
-
-  const calculateAveragePrice = () => {
-    console.log("平均価格計算");
-    const allPrices: number[] = [];
-
-    // localStorageからすべての都道府県データを取得
-    for (let i = 1; i <= 2; i++) {
-      // 都道府県コードは1から47まで
-      const key = `${i}-${displayType}`; // 各都道府県のキャッシュキー
-      const cachedData = localStorage.getItem(key);
-      if (cachedData) {
-        const parsedData: EstateTransactionResponse = JSON.parse(cachedData);
-        const value = parsedData.years.find(
-          (year) => year.year === selectedYear
-        )?.value;
-        if (value) {
-          allPrices.push(value);
-        }
-      }
-    }
-
-    // 全国平均価格を計算
-    const totalValue = allPrices.reduce((sum, price) => sum + price, 0);
-    const avgPrice = allPrices.length > 0 ? totalValue / allPrices.length : 0; // 都道府県数で割って平均を出す
-    console.log("平均価格", avgPrice);
-    setAveragePrice(avgPrice);
-    setError(null);
-  };
+  }, [prefCode, displayType, selectedYear]);
 
   // 年度変更ハンドラー
   const handleYearChange = (year: number) => {
@@ -142,7 +186,6 @@ const DataDisplayArea: React.FC = () => {
     datasets: [
       {
         label: "取引価格 (円/㎡)",
-        // selectedYear に基づいて価格を取得
         data: [
           estateData
             ? estateData.years.find((year) => year.year === selectedYear)
@@ -229,7 +272,6 @@ const DataDisplayArea: React.FC = () => {
           )}
         </div>
         <div className="w-full sm:w-1/4">
-          {" "}
           {/* UIPanelをリスポンシブにする */}
           <UIPanel
             prefCode={prefCode}
