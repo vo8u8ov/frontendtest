@@ -1,6 +1,5 @@
-// src/firebase.ts
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -11,6 +10,6 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-// Firebaseの初期化
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+
+export const database = getDatabase(app);
