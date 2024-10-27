@@ -1,7 +1,7 @@
 // src/api.ts
 import { database } from "./firebase"; // firebaseモジュールのインポート
 import { ref, set, get } from "firebase/database";
-import { EstateTransactionResponse } from "./types"; // 追加: 型をインポート
+import { YearData, EstateTransactionResponse } from "./types"; // 追加: 型をインポート
 
 // データをFirebaseに保存する関数
 export const saveDataToFirebase = async (
@@ -35,14 +35,45 @@ export const saveDataToFirebase = async (
   const { prefCode: code, prefName, years } = data.result;
   console.log("データ：", data);
 
-  // データをFirebaseに保存
-  const dataRef = ref(database, `prefectures/${code}/${displayType}`); // prefCodeを変数として利用
-  await set(dataRef, {
-    prefCode: code,
+  /// Firebaseから現在のデータを取得
+  const dataRef = ref(database, `prefectures/${code}/${displayType}`);
+  const snapshot = await get(dataRef);
+
+  // 既存のデータがあれば、それを取得
+  let existingData: EstateTransactionResponse = {
+    prefCode,
     prefName,
-    years,
-  });
-  console.log("データがFirebaseに保存されました:", data.result);
+    displayType,
+    years: [],
+  };
+
+  if (snapshot.exists()) {
+    const fetchedData = snapshot.val();
+    // 型チェックを追加
+    if (fetchedData && typeof fetchedData === "object") {
+      existingData = fetchedData as EstateTransactionResponse;
+    } else {
+      console.error("取得したデータの型が正しくありません:", fetchedData);
+    }
+  }
+
+  // 新しい年のデータを追加
+  const newYearData: YearData = { year, value: years[0].value }; // APIから取得した新しいデータの値を使用
+  const existingYearData = existingData.years.find(
+    (yearData) => yearData.year === year
+  );
+
+  if (!existingYearData) {
+    // 同じ年のデータが存在しない場合は追加
+    existingData.years.push(newYearData);
+    console.log(`年${year}のデータが追加されました。`);
+  } else {
+    console.log(`年${year}のデータは既に存在しています。`);
+  }
+
+  // 更新されたデータをFirebaseに保存
+  await set(dataRef, existingData);
+  console.log("データがFirebaseに保存されました:", existingData);
 };
 
 // Firebaseからデータを取得する関数
