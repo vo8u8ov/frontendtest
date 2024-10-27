@@ -26,6 +26,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "homepage": "https://vo8u8ov.github.io/frontendtest",
   "eslintConfig": {
     "extends": [
       "react-app",
