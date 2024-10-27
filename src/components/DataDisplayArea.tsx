@@ -67,13 +67,10 @@ const DataDisplayArea: React.FC = () => {
                 );
 
                 console.log("latestApiData:", latestApiData);
-                if (!latestApiData) {
-                  console.error("取得したデータがnullまたはundefinedです。");
-                } else {
-                  // latestApiDataが存在すればそれを使用、存在しなければデフォルトのオブジェクトを使用
+                if (latestApiData) {
                   allPrefData[i] = latestApiData;
 
-                  // localStorageにはlatestApiDataを保存
+                  // localStorageに最新データを保存
                   localStorage.setItem(
                     `prefData_${i}_${displayType}_${selectedYear}`,
                     JSON.stringify(allPrefData[i]) // allPrefData[i]を保存
@@ -83,6 +80,8 @@ const DataDisplayArea: React.FC = () => {
                     "APIからデータ取得してローカルストレージに保存:",
                     i
                   );
+                } else {
+                  console.error("取得したデータがnullまたはundefinedです。");
                 }
               } else {
                 allPrefData[i] = apiData;
