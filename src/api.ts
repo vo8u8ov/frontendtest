@@ -66,7 +66,6 @@ export const saveDataToFirebase = async (
   // データをJSON形式で取得
   const data = await response.json();
   const { prefCode: code, prefName, years } = data.result;
-  console.log("データ：", data);
 
   /// Firebaseから現在のデータを取得
   const dataRef = ref(database, `prefectures/${code}/${displayType}`);
@@ -106,7 +105,7 @@ export const saveDataToFirebase = async (
 
   // 更新されたデータをFirebaseに保存
   await set(dataRef, existingData);
-  console.log("データがFirebaseに保存されました:", existingData);
+  console.log("データがDBに保存されました:", existingData);
 };
 
 // Firebaseからデータを取得する関数
@@ -115,7 +114,7 @@ export const fetchDataFromFirebase = async (
   displayType: number,
   year: number
 ): Promise<EstateTransactionResponse | null> => {
-  console.log("fetchDataFromFirebase実行");
+  console.log("APIでデータを取得");
   const dataRef = ref(database, `prefectures/${prefCode}/${displayType}`);
   const snapshot = await get(dataRef);
 
@@ -126,7 +125,6 @@ export const fetchDataFromFirebase = async (
     const yearData = data.years.find((yearData) => yearData.year === year);
 
     if (yearData) {
-      console.log("取得した年データ:", yearData);
       return {
         ...data,
         years: [yearData], // 見つかった年データだけを含む新しいオブジェクトを返す

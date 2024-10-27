@@ -37,8 +37,6 @@ const DataDisplayArea: React.FC = () => {
   useEffect(() => {
     const fetchAndCacheData = async () => {
       try {
-        console.log("トライ");
-
         // すべての都道府県データを取得
         const allPrefData: Record<number, EstateTransactionResponse> = {};
         const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
@@ -100,7 +98,6 @@ const DataDisplayArea: React.FC = () => {
 
         // すべての都道府県のデータ取得の完了を待つ
         await Promise.all(fetchPromises);
-        console.log("都道府県データ：", allPrefData);
 
         // 全国平均の計算
         let totalValue = 0;
@@ -116,12 +113,11 @@ const DataDisplayArea: React.FC = () => {
 
         let averagePrice = totalValue / 47;
         setAveragePrice(averagePrice);
-        console.log("平均価格", averagePrice);
 
         // 現在選択されている都道府県のデータを取得
         if (allPrefData[prefCode]) {
           setEstateData(allPrefData[prefCode]);
-          console.log("キャッシュデータを使用:", allPrefData[prefCode]);
+          console.log("キャッシュデータを使用");
         } else {
           console.log("現在の都道府県のデータが見つからなかったため保存します");
           const apiData = await fetchDataFromFirebase(
