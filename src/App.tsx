@@ -3,10 +3,20 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import DataDisplayArea from "./components/DataDisplayArea";
+import BackgroundImage from "./background image.svg";
 
 const App: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
+    <div
+      className="flex flex-col min-h-screen text-white"
+      style={{
+        backgroundColor: "#000000CC", // Semi-transparent black
+        backgroundImage: `url(${BackgroundImage})`, // Set the background image
+        backgroundSize: "cover", // Cover the entire area
+        backgroundPosition: "center", // Center the image
+        backgroundRepeat: "no-repeat", // Do not repeat the image
+      }}
+    >
       <Header />
       <div className="flex flex-grow">
         <div className="flex-grow p-4">
