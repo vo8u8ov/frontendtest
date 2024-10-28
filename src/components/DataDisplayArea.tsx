@@ -202,6 +202,7 @@ const DataDisplayArea: React.FC = () => {
           font: {
             size: 12,
           },
+          color: "rgba(255, 255, 255, 1)",
         },
         grid: {
           drawOnChartArea: false, // グリッド線をチャートエリアには描画しない
@@ -209,6 +210,7 @@ const DataDisplayArea: React.FC = () => {
           lineWidth: 1, // グリッド線の太さを設定
         },
         ticks: {
+          color: "rgba(255, 255, 255, 1)",
           font: {
             size: 10,
           },
@@ -220,6 +222,7 @@ const DataDisplayArea: React.FC = () => {
       },
       x: {
         ticks: {
+          color: "rgba(255, 255, 255, 1)",
           font: {
             size: 10,
           },
@@ -285,7 +288,7 @@ const DataDisplayArea: React.FC = () => {
             ) : (
               <div style={{ width: "50%", height: "500px" }}>
                 <div className="text-center mb-2">
-                  <span className="text-lg font-semibold">
+                  <span className="text-lg">
                     {prefName} {selectedYear}年 {displayTypeText}
                   </span>
                 </div>
