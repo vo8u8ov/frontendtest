@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { saveDataToFirebase, fetchDataFromFirebase } from "../api";
 import { EstateTransactionResponse } from "../types";
+import BackgroundImage from "../backgroundimage.svg";
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(
@@ -241,7 +242,19 @@ const DataDisplayArea: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col p-4">
+    <div
+      className="flex flex-col p-4 gap-10"
+      style={{
+        backgroundColor: "#000000CC",
+        backgroundImage: `url(${BackgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        width: "1920px",
+        height: "956px",
+        padding: "40px",
+      }}
+    >
       {/* 取引価格セクション */}
       <div className="mb-4">
         <h2 className="text-2xl font-bold flex items-center">
