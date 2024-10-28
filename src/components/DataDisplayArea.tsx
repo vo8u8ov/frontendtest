@@ -275,7 +275,10 @@ const DataDisplayArea: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between mt-4 items-center">
+        <div
+          className="flex flex-col sm:flex-row justify-between mt-4 items-center"
+          style={{ width: "1840px", height: "780px", gap: "24px" }}
+        >
           <div className="flex-grow flex justify-center">
             {error ? (
               <p className="text-red-500">{error}</p>
