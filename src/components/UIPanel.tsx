@@ -157,8 +157,9 @@ const UIPanel: React.FC<UIPanelProps> = ({
       </div>
       <div>
         <button
-          className="bg-blue-600 mt-80 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 w-full"
-          onClick={() => console.log("データをダウンロード")} // クリック時の動作（仮実装）
+          style={{ backgroundColor: "#0071c1" }}
+          className="mt-80 text-white py-2 px-4 rounded-sm hover:bg-blue-700 w-full"
+          onClick={() => console.log("データをダウンロード")}
         >
           データをダウンロード
         </button>
