@@ -13,6 +13,7 @@ import {
 import { saveDataToFirebase, fetchDataFromFirebase } from "../api";
 import { EstateTransactionResponse } from "../types";
 import BackgroundImage from "../backgroundimage.svg";
+import Frame1395 from "../Frame1395.svg";
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(
@@ -36,113 +37,103 @@ const DataDisplayArea: React.FC = () => {
 
   // データ取得のハンドラー
   useEffect(() => {
-    const fetchAndCacheData = async () => {
-      try {
-        // すべての都道府県データを取得
-        const allPrefData: Record<number, EstateTransactionResponse> = {};
-        const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
-          async (i) => {
-            const localData = localStorage.getItem(
-              `prefData_${i}_${displayType}_${selectedYear}`
-            );
-            if (localData) {
-              allPrefData[i] = JSON.parse(localData);
-              console.log("ローカルストレージからデータ取得:", i);
-            } else {
-              const apiData = await fetchDataFromFirebase(
-                i,
-                displayType,
-                selectedYear
-              );
-              if (!apiData) {
-                console.log("データがないため保存:", i);
-                await saveDataToFirebase(i, displayType, selectedYear);
-
-                // Firebaseから最新データを再取得
-                const latestApiData = await fetchDataFromFirebase(
-                  i,
-                  displayType,
-                  selectedYear
-                );
-
-                console.log("latestApiData:", latestApiData);
-                if (latestApiData) {
-                  allPrefData[i] = latestApiData;
-
-                  // localStorageに最新データを保存
-                  localStorage.setItem(
-                    `prefData_${i}_${displayType}_${selectedYear}`,
-                    JSON.stringify(allPrefData[i]) // allPrefData[i]を保存
-                  );
-
-                  console.log(
-                    "APIからデータ取得してローカルストレージに保存:",
-                    i
-                  );
-                } else {
-                  console.error("取得したデータがnullまたはundefinedです。");
-                }
-              } else {
-                allPrefData[i] = apiData;
-                localStorage.setItem(
-                  `prefData_${i}_${displayType}_${selectedYear}`,
-                  JSON.stringify(apiData)
-                );
-                console.log(
-                  "APIからデータ取得してローカルストレージに保存:",
-                  i
-                );
-              }
-            }
-          }
-        );
-
-        // すべての都道府県のデータ取得の完了を待つ
-        await Promise.all(fetchPromises);
-
-        // 全国平均の計算
-        let totalValue = 0;
-
-        for (let i = 1; i <= 47; i++) {
-          const yearData = allPrefData[i]?.years.find(
-            (year) => year.year === selectedYear
-          );
-          if (yearData?.value) {
-            totalValue += yearData.value;
-          }
-        }
-
-        let averagePrice = totalValue / 47;
-        setAveragePrice(averagePrice);
-
-        // 現在選択されている都道府県のデータを取得
-        if (allPrefData[prefCode]) {
-          setEstateData(allPrefData[prefCode]);
-          console.log("キャッシュデータを使用");
-        } else {
-          console.log("現在の都道府県のデータが見つからなかったため保存します");
-          const apiData = await fetchDataFromFirebase(
-            prefCode,
-            displayType,
-            selectedYear
-          );
-          setEstateData(apiData);
-          localStorage.setItem(
-            `prefData_${prefCode}_${displayType}_${selectedYear}`,
-            JSON.stringify(apiData)
-          );
-          console.log(
-            "APIから取得したデータをローカルストレージに保存:",
-            apiData
-          );
-        }
-      } catch (err) {
-        console.error("データ取得エラー:", err);
-        setError("データ取得に失敗しました。");
-      }
-    };
-
-    fetchAndCacheData();
+    // const fetchAndCacheData = async () => {
+    //   try {
+    //     // すべての都道府県データを取得
+    //     const allPrefData: Record<number, EstateTransactionResponse> = {};
+    //     const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
+    //       async (i) => {
+    //         const localData = localStorage.getItem(
+    //           `prefData_${i}_${displayType}_${selectedYear}`
+    //         );
+    //         if (localData) {
+    //           allPrefData[i] = JSON.parse(localData);
+    //           console.log("ローカルストレージからデータ取得:", i);
+    //         } else {
+    //           const apiData = await fetchDataFromFirebase(
+    //             i,
+    //             displayType,
+    //             selectedYear
+    //           );
+    //           if (!apiData) {
+    //             console.log("データがないため保存:", i);
+    //             await saveDataToFirebase(i, displayType, selectedYear);
+    //             // Firebaseから最新データを再取得
+    //             const latestApiData = await fetchDataFromFirebase(
+    //               i,
+    //               displayType,
+    //               selectedYear
+    //             );
+    //             console.log("latestApiData:", latestApiData);
+    //             if (latestApiData) {
+    //               allPrefData[i] = latestApiData;
+    //               // localStorageに最新データを保存
+    //               localStorage.setItem(
+    //                 `prefData_${i}_${displayType}_${selectedYear}`,
+    //                 JSON.stringify(allPrefData[i]) // allPrefData[i]を保存
+    //               );
+    //               console.log(
+    //                 "APIからデータ取得してローカルストレージに保存:",
+    //                 i
+    //               );
+    //             } else {
+    //               console.error("取得したデータがnullまたはundefinedです。");
+    //             }
+    //           } else {
+    //             allPrefData[i] = apiData;
+    //             localStorage.setItem(
+    //               `prefData_${i}_${displayType}_${selectedYear}`,
+    //               JSON.stringify(apiData)
+    //             );
+    //             console.log(
+    //               "APIからデータ取得してローカルストレージに保存:",
+    //               i
+    //             );
+    //           }
+    //         }
+    //       }
+    //     );
+    //     // すべての都道府県のデータ取得の完了を待つ
+    //     await Promise.all(fetchPromises);
+    //     // 全国平均の計算
+    //     let totalValue = 0;
+    //     for (let i = 1; i <= 47; i++) {
+    //       const yearData = allPrefData[i]?.years.find(
+    //         (year) => year.year === selectedYear
+    //       );
+    //       if (yearData?.value) {
+    //         totalValue += yearData.value;
+    //       }
+    //     }
+    //     let averagePrice = totalValue / 47;
+    //     setAveragePrice(averagePrice);
+    //     // 現在選択されている都道府県のデータを取得
+    //     if (allPrefData[prefCode]) {
+    //       setEstateData(allPrefData[prefCode]);
+    //       console.log("キャッシュデータを使用");
+    //     } else {
+    //       console.log("現在の都道府県のデータが見つからなかったため保存します");
+    //       const apiData = await fetchDataFromFirebase(
+    //         prefCode,
+    //         displayType,
+    //         selectedYear
+    //       );
+    //       setEstateData(apiData);
+    //       localStorage.setItem(
+    //         `prefData_${prefCode}_${displayType}_${selectedYear}`,
+    //         JSON.stringify(apiData)
+    //       );
+    //       console.log(
+    //         "APIから取得したデータをローカルストレージに保存:",
+    //         apiData
+    //       );
+    //     }
+    //   } catch (err) {
+    //     console.error("データ取得エラー:", err);
+    //     setError("データ取得に失敗しました。");
+    //   }
+    // };
+    // fetchAndCacheData();
   }, [prefCode, displayType, selectedYear]);
 
   // 年度変更ハンドラー
@@ -255,42 +246,62 @@ const DataDisplayArea: React.FC = () => {
         padding: "40px",
       }}
     >
-      {/* 取引価格セクション */}
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold flex items-center">
-          <span className="mr-2">📊</span>
-          取引価格
-        </h2>
-        <p className="text-sm mt-1">※取引面積1㎡あたり</p>
-        <hr className="my-2 border-gray-600" />
-      </div>
-
-      <div className="flex flex-col sm:flex-row justify-between mt-4 items-center">
-        <div className="flex-grow flex justify-center">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <div style={{ width: "50%", height: "500px" }}>
-              <div className="text-center mb-2">
-                <span className="text-lg font-semibold">
-                  {prefName} {selectedYear}年 {displayTypeText}
-                </span>
-              </div>
-              <Bar data={chartData} options={chartOptions} />
-            </div>
-          )}
-        </div>
-        <div className="w-full sm:w-1/4">
-          {/* UIPanelをリスポンシブにする */}
-          <UIPanel
-            prefCode={prefCode}
-            selectedYear={selectedYear}
-            displayType={displayType}
-            handlePrefChange={handlePrefChange}
-            handlePrefNameChange={handlePrefNameChange}
-            handleYearChange={handleYearChange}
-            handleDisplayTypeChange={handleDisplayTypeChange}
+      <div className="flex flex-col p-4">
+        {/* 取引価格セクション */}
+        <div
+          className="flex items-end mb-4 w-[1840px] h-[56px] pb-[16px]"
+          style={{ gap: "16px", borderBottom: "1px solid #FFFFFF33" }}
+        >
+          <img
+            src={Frame1395}
+            alt="取引価格"
+            style={{ width: "163px", height: "40px" }}
           />
+          <p
+            className="text-sm"
+            style={{
+              width: "131px",
+              height: "21px",
+              lineHeight: "20.57px",
+              fontFamily: "Noto Sans JP",
+              fontSize: "13.71px",
+              fontWeight: 400,
+              textAlign: "left",
+              whiteSpace: "nowrap", // Prevent text wrapping
+              overflow: "visible", // Allow overflow to be visible
+            }}
+          >
+            ※取引面積1㎡あたり
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row justify-between mt-4 items-center">
+          <div className="flex-grow flex justify-center">
+            {error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div style={{ width: "50%", height: "500px" }}>
+                <div className="text-center mb-2">
+                  <span className="text-lg font-semibold">
+                    {prefName} {selectedYear}年 {displayTypeText}
+                  </span>
+                </div>
+                <Bar data={chartData} options={chartOptions} />
+              </div>
+            )}
+          </div>
+          <div className="w-full sm:w-1/4">
+            {/* UIPanelをリスポンシブにする */}
+            <UIPanel
+              prefCode={prefCode}
+              selectedYear={selectedYear}
+              displayType={displayType}
+              handlePrefChange={handlePrefChange}
+              handlePrefNameChange={handlePrefNameChange}
+              handleYearChange={handleYearChange}
+              handleDisplayTypeChange={handleDisplayTypeChange}
+            />
+          </div>
         </div>
       </div>
     </div>
