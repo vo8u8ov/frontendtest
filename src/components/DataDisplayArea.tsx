@@ -158,22 +158,6 @@ const DataDisplayArea: React.FC = () => {
     setDisplayType(type);
   };
 
-  // グラデーションを生成する関数
-  const getGradient = (
-    ctx: CanvasRenderingContext2D,
-    chartArea: { left: number; right: number; top: number; bottom: number }
-  ) => {
-    const gradient = ctx.createLinearGradient(
-      0,
-      chartArea.bottom,
-      0,
-      chartArea.top
-    );
-    gradient.addColorStop(0, "#97bf4a"); // 開始色: 緑
-    gradient.addColorStop(1, "#009984"); // 終了色: 黄緑
-    return gradient;
-  };
-
   const displayTypeText =
     displayType === 1
       ? "土地(住宅地)"
@@ -186,6 +170,24 @@ const DataDisplayArea: React.FC = () => {
       : displayType === 5
       ? "林地"
       : "";
+
+  // グラデーションを生成する関数
+  const getGradient = (
+    ctx: CanvasRenderingContext2D,
+    chartArea: { left: number; right: number; top: number; bottom: number },
+    colorStart: string,
+    colorEnd: string
+  ) => {
+    const gradient = ctx.createLinearGradient(
+      0,
+      chartArea.bottom,
+      0,
+      chartArea.top
+    );
+    gradient.addColorStop(0, colorStart); // 開始色: 緑
+    gradient.addColorStop(1, colorEnd); // 終了色: 黄緑
+    return gradient;
+  };
 
   // グラフのデータと設定
   const chartData = {
@@ -208,17 +210,21 @@ const DataDisplayArea: React.FC = () => {
               right: number;
               top: number;
               bottom: number;
-            };
+            } | null;
           };
+          dataIndex: number;
         }) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
+          const { ctx, chartArea } = context.chart;
 
+          // chartAreaが未定義の場合はシンプルな色配列を返す
           if (!chartArea) {
-            return "";
+            return context.dataIndex === 0 ? "#97bf4a" : "#f8c471";
           }
 
-          return getGradient(ctx, chartArea);
+          // chartAreaが利用可能な場合はグラデーションを作成して返す
+          const color1 = getGradient(ctx, chartArea, "#97bf4a", "#009984"); // prefName用
+          const color2 = "#636058"; // 全国平均用
+          return context.dataIndex === 0 ? color1 : color2;
         },
       },
     ],
