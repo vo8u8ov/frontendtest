@@ -286,8 +286,13 @@ const DataDisplayArea: React.FC = () => {
             {error ? (
               <p className="text-red-500">{error}</p>
             ) : (
-              <div style={{ width: "50%", height: "500px" }}>
-                <div className="text-center mb-2">
+              <div
+                style={{ width: "50%", height: "500px", marginTop: "-20px" }}
+              >
+                <div
+                  className="text-center mb-2"
+                  style={{ marginBottom: "40px" }}
+                >
                   <span className="text-lg">
                     {prefName} {selectedYear}年 {displayTypeText}
                   </span>
