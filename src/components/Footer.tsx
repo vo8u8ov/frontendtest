@@ -3,7 +3,14 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 p-4 text-left flex justify-between items-center">
+    <footer
+      className="flex justify-between items-center p-4 text-left"
+      style={{
+        width: "1920px",
+        height: "50px",
+        backgroundColor: "#000000CC",
+      }}
+    >
       <div className="flex items-center">
         <a href="/terms" className="flex items-center mr-4">
           利用規約
