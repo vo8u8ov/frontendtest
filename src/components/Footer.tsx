@@ -1,5 +1,6 @@
 // src/Footer.tsx
 import React from "react";
+import FooterNav from "../footerNav.svg";
 import CopyrightLogo from "../copyright.svg";
 
 const Footer: React.FC = () => {
@@ -15,40 +16,16 @@ const Footer: React.FC = () => {
       }}
     >
       <div className="flex items-center">
-        <a href="/terms" className="flex items-center mr-4">
-          利用規約
-          <svg
-            className="h-5 w-5 mr-1 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v8m0 0v4m0-4H8m4 0h4"
-            />
-          </svg>
-        </a>
-        <a href="/privacy" className="flex items-center">
-          プライバシーポリシー
-          <svg
-            className="h-5 w-5 mr-1 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v8m0 0v4m0-4H8m4 0h4"
-            />
-          </svg>
-        </a>
+        <div
+          className="flex items-center"
+          style={{
+            width: "232px", // Set width to 232px
+            height: "18px", // Set height to 18px
+            gap: "24px", // Set gap to 24px
+          }}
+        >
+          <img src={FooterNav} alt="Terms Icon" />
+        </div>
       </div>
       <div className="flex items-center" style={{ gap: "24px" }}>
         <img
