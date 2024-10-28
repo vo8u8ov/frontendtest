@@ -34,7 +34,10 @@ const UIPanel: React.FC<UIPanelProps> = ({
     }
   };
   return (
-    <div className="w-full border bg-gray-700  p-4 rounded-lg">
+    <div
+      className="w-full border p-4 rounded-sm text-black"
+      style={{ backgroundColor: "#f0f3f5" }}
+    >
       {/* 表示内容を選択 */}
       <h3 className="text-lg font-bold mb-2">表示内容を選択</h3>
       <hr className="border-gray-500 mb-4" />
@@ -52,7 +55,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <select
           value={prefCode}
           onChange={(e) => handlePrefChangeWithPrefName(Number(e.target.value))}
-          className="border border-gray-300 p-2 bg-gray-600 w-2/3"
+          className="border border-gray-300 p-2 bg-white text-black w-2/3"
         >
           {prefectures.map((pref) => (
             <option key={pref.code} value={pref.code}>
@@ -75,7 +78,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <select
           value={selectedYear}
           onChange={(e) => handleYearChange(Number(e.target.value))}
-          className="border border-gray-300 p-2 bg-gray-600 w-2/3"
+          className="border border-gray-300 p-2 bg-white text-black w-2/3"
         >
           {years.map((year) => (
             <option key={year} value={year}>
