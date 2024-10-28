@@ -1,5 +1,6 @@
 // src/components/Header.tsx
 import React from "react";
+import Logo from "../logo-landit.svg";
 
 const Header: React.FC = () => {
   return (
@@ -13,7 +14,9 @@ const Header: React.FC = () => {
         backgroundColor: "#FFFFFF",
         gap: "10px",
       }}
-    ></header>
+    >
+      <img src={Logo} alt="Landit Logo" style={{ width: "233px", height: "60px" }} />
+    </header>
   );
 };
 
