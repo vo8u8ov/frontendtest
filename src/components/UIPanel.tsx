@@ -39,8 +39,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
       style={{ backgroundColor: "#f0f3f5" }}
     >
       {/* 表示内容を選択 */}
-      <h3 className="text-lg font-bold mb-2">表示内容を選択</h3>
-      <hr className="border-gray-500 mb-4" />
+      <h3 className="text-lg mb-2">表示内容を選択</h3>
+      <hr className="border-gray-300 mb-4" />
 
       {/* 場所 */}
       <div className="flex items-center mb-4">
@@ -55,7 +55,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <select
           value={prefCode}
           onChange={(e) => handlePrefChangeWithPrefName(Number(e.target.value))}
-          className="border border-gray-300 p-2 bg-white text-black w-2/3"
+          className="border border-gray-300 p-2 bg-white text-black w-2/3 rounded-sm"
         >
           {prefectures.map((pref) => (
             <option key={pref.code} value={pref.code}>
@@ -64,6 +64,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
           ))}
         </select>
       </div>
+      <hr className="border-gray-300 mb-4" />
 
       {/* 年度 */}
       <div className="flex items-center mb-4">
@@ -78,7 +79,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <select
           value={selectedYear}
           onChange={(e) => handleYearChange(Number(e.target.value))}
-          className="border border-gray-300 p-2 bg-white text-black w-2/3"
+          className="border border-gray-300 p-2 bg-white text-black w-2/3 rounded-sm"
         >
           {years.map((year) => (
             <option key={year} value={year}>
@@ -87,6 +88,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
           ))}
         </select>
       </div>
+      <hr className="border-gray-300 mb-4" />
 
       {/* 表示タイプ */}
       <div className="flex items-start mb-4">
