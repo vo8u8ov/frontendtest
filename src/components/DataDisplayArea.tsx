@@ -181,7 +181,7 @@ const DataDisplayArea: React.FC = () => {
             : 0,
           averagePrice,
         ],
-        backgroundColor: ["#4C9F70", "#FF6347"],
+        backgroundColor: ["#4C9F70", "#636058"],
       },
     ],
   };
