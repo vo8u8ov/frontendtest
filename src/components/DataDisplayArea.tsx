@@ -14,6 +14,9 @@ import { saveDataToFirebase, fetchDataFromFirebase } from "../api";
 import { EstateTransactionResponse } from "../types";
 import BackgroundImage from "../backgroundimage.svg";
 import Frame1395 from "../Frame1395.svg";
+import MapIcon from "../marker.svg";
+import CalendarIcon from "../calendar-check.svg";
+import TypeIcon from "../resources.svg";
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(
@@ -293,8 +296,31 @@ const DataDisplayArea: React.FC = () => {
                   className="text-center mb-2"
                   style={{ marginBottom: "40px" }}
                 >
-                  <span className="text-lg">
-                    {prefName} {selectedYear}年 {displayTypeText}
+                  <span className="text-lg flex items-center justify-center space-x-3">
+                    <img
+                      src={MapIcon}
+                      alt="Map Icon"
+                      width="20"
+                      height="20"
+                      className="mr-2 text-gray-300"
+                    />
+                    <span>{prefName}</span>
+                    <img
+                      src={CalendarIcon}
+                      alt="Calendar Icon"
+                      width="20"
+                      height="20"
+                      className="mr-2 text-gray-300"
+                    />
+                    <span>{selectedYear}年</span>
+                    <img
+                      src={TypeIcon}
+                      alt="Type Icon"
+                      width="20"
+                      height="20"
+                      className="mr-2 text-gray-300"
+                    />
+                    <span>{displayTypeText}</span>
                   </span>
                 </div>
                 <Bar data={chartData} options={chartOptions} />
