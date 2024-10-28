@@ -55,6 +55,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <select
           value={prefCode}
           onChange={(e) => handlePrefChangeWithPrefName(Number(e.target.value))}
+          style={{ width: "610px" }}
           className="border border-gray-300 p-2 bg-white text-black w-2/3 rounded-sm"
         >
           {prefectures.map((pref) => (
@@ -79,6 +80,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <select
           value={selectedYear}
           onChange={(e) => handleYearChange(Number(e.target.value))}
+          style={{ width: "610px" }}
           className="border border-gray-300 p-2 bg-white text-black w-2/3 rounded-sm"
         >
           {years.map((year) => (
@@ -99,7 +101,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
           height="20"
           className="mr-2 text-gray-300"
         />
-        <label className="w-1/3 mr-2">種類</label>
+        <label className="w-1/6 mr-2">種類</label>
         <div className="flex flex-col w-2/3">
           <label className="flex items-center mb-1">
             <input
