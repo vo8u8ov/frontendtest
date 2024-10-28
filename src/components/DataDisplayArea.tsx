@@ -158,6 +158,22 @@ const DataDisplayArea: React.FC = () => {
     setDisplayType(type);
   };
 
+  // グラデーションを生成する関数
+  const getGradient = (
+    ctx: CanvasRenderingContext2D,
+    chartArea: { left: number; right: number; top: number; bottom: number }
+  ) => {
+    const gradient = ctx.createLinearGradient(
+      0,
+      chartArea.bottom,
+      0,
+      chartArea.top
+    );
+    gradient.addColorStop(0, "#97bf4a"); // 開始色: 緑
+    gradient.addColorStop(1, "#009984"); // 終了色: 黄緑
+    return gradient;
+  };
+
   const displayTypeText =
     displayType === 1
       ? "土地(住宅地)"
@@ -184,7 +200,26 @@ const DataDisplayArea: React.FC = () => {
             : 0,
           averagePrice,
         ],
-        backgroundColor: ["#4C9F70", "#636058"],
+        backgroundColor: (context: {
+          chart: {
+            ctx: CanvasRenderingContext2D;
+            chartArea: {
+              left: number;
+              right: number;
+              top: number;
+              bottom: number;
+            };
+          };
+        }) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+
+          if (!chartArea) {
+            return "";
+          }
+
+          return getGradient(ctx, chartArea);
+        },
       },
     ],
   };
