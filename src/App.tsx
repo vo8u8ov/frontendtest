@@ -16,7 +16,7 @@ const App: React.FC = () => {
         backgroundPosition: "center", // Center the image
         backgroundRepeat: "no-repeat", // Do not repeat the image
         width: "1920px", // Fixed width
-        // height: "956px", // Fixed height
+        height: "956px", // Fixed height
         // padding: "40px", // Padding of 40px
       }}
     >
