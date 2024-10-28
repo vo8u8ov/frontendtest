@@ -1,5 +1,6 @@
 // src/Footer.tsx
 import React from "react";
+import CopyrightLogo from "../copyright.svg";
 
 const Footer: React.FC = () => {
   return (
@@ -47,7 +48,13 @@ const Footer: React.FC = () => {
           </svg>
         </a>
       </div>
-      <p>&copy; 2023 Landit Inc.</p> {/* ここを変更 */}
+      <div className="flex items-center" style={{ gap: "24px" }}>
+        <img
+          src={CopyrightLogo}
+          alt="Copyright"
+          style={{ width: "auto", height: "18px" }} // Height set to 18px
+        />
+      </div>
     </footer>
   );
 };
