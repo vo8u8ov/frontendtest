@@ -5,11 +5,13 @@ import CopyrightLogo from "../copyright.svg";
 const Footer: React.FC = () => {
   return (
     <footer
-      className="flex justify-between items-center p-4 text-left"
+      className="flex justify-between items-center"
       style={{
         width: "1920px",
         height: "50px",
         backgroundColor: "#000000CC",
+        padding: "16px 32px",
+        borderTop: "1px solid #FFFFFF33",
       }}
     >
       <div className="flex items-center">
