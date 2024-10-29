@@ -14,9 +14,9 @@ import { saveDataToFirebase, fetchDataFromFirebase } from "../api";
 import { EstateTransactionResponse } from "../types";
 import BackgroundImage from "../backgroundimage.svg";
 import Frame1395 from "../Frame1395.svg";
-import MapIcon from "../marker.svg";
-import CalendarIcon from "../calendar-check.svg";
-import TypeIcon from "../resources.svg";
+import MapIcon from "../marker2.svg";
+import CalendarIcon from "../calendar-check2.svg";
+import TypeIcon from "../resources2.svg";
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(
