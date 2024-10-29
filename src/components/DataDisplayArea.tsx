@@ -332,12 +332,13 @@ const DataDisplayArea: React.FC = () => {
               <div style={{ width: "713px", height: "446px" }}>
                 <div style={{ marginBottom: "40px" }}>
                   <span
-                    className="flex items-center justify-center space-x-3 w-[498px] h-[30px]"
+                    className="flex items-center justify-center w-[498px] h-[30px]"
                     style={{
                       margin: "0 auto", // 中央寄せ
                       display: "flex", // フレックスボックス
                       alignItems: "center", // アイコンとテキストを縦方向で中央寄せ
                       justifyContent: "center", // 横方向で中央寄せ
+                      gap: "48px", // 各要素間のスペースを48pxに設定
                     }}
                   >
                     <img
