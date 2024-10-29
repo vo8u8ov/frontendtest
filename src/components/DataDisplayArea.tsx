@@ -392,16 +392,30 @@ const DataDisplayArea: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <span
-                  className="text-sm flex justify-start"
+                <div
                   style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
                     marginLeft: "30px",
                     position: "relative",
                     bottom: "5px",
                   }}
                 >
-                  (円/㎡)
-                </span>
+                  <span
+                    style={{
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "12px",
+                      fontWeight: 400,
+                      lineHeight: "12px",
+                      textAlign: "right",
+                      width: "fit-content",
+                      height: "fit-content",
+                    }}
+                  >
+                    (円/㎡)
+                  </span>
+                </div>
                 <Bar data={chartData} options={chartOptions} />
               </div>
             )}
