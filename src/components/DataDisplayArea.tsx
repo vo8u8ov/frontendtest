@@ -329,14 +329,17 @@ const DataDisplayArea: React.FC = () => {
             {error ? (
               <p className="text-red-500">{error}</p>
             ) : (
-              <div
-                style={{ width: "50%", height: "500px", marginTop: "-20px" }}
-              >
-                <div
-                  className="text-center mb-2"
-                  style={{ marginBottom: "40px" }}
-                >
-                  <span className="text-lg flex items-center justify-center space-x-3">
+              <div style={{ width: "713px", height: "446px" }}>
+                <div style={{ marginBottom: "40px" }}>
+                  <span
+                    className="flex items-center justify-center space-x-3 w-[498px] h-[30px]"
+                    style={{
+                      margin: "0 auto", // 中央寄せ
+                      display: "flex", // フレックスボックス
+                      alignItems: "center", // アイコンとテキストを縦方向で中央寄せ
+                      justifyContent: "center", // 横方向で中央寄せ
+                    }}
+                  >
                     <img
                       src={MapIcon}
                       alt="Map Icon"
