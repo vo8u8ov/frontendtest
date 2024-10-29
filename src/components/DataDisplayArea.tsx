@@ -297,8 +297,15 @@ const DataDisplayArea: React.FC = () => {
       <div className="flex flex-col p-4">
         {/* 取引価格セクション */}
         <div
-          className="flex items-end mb-4 w-[1840px] h-[56px] pb-[16px]"
-          style={{ gap: "16px", borderBottom: "1px solid #FFFFFF33" }}
+          className="flex items-end mb-4"
+          style={{
+            width: "1840px",
+            height: "auto",
+            padding: "0px 0px 16px 0px",
+            gap: "16px",
+            border: "0px 0px 1px 0px",
+            borderBottom: "1px solid #FFFFFF33",
+          }}
         >
           <img
             src={Frame1395}
@@ -317,6 +324,7 @@ const DataDisplayArea: React.FC = () => {
               textAlign: "left",
               whiteSpace: "nowrap", // Prevent text wrapping
               overflow: "visible", // Allow overflow to be visible
+              color: "#FFFFFF",
             }}
           >
             ※取引面積1㎡あたり
