@@ -17,6 +17,7 @@ import Frame1395 from "../Frame1395.svg";
 import MapIcon from "../marker2.svg";
 import CalendarIcon from "../calendar-check2.svg";
 import TypeIcon from "../resources2.svg";
+import GraphIcon from "../graphicon.svg";
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(
@@ -307,11 +308,29 @@ const DataDisplayArea: React.FC = () => {
             borderBottom: "1px solid #FFFFFF33",
           }}
         >
-          <img
-            src={Frame1395}
-            alt="取引価格"
-            style={{ width: "163px", height: "40px" }}
-          />
+          {/* 取引価格セット */}
+          <div className="flex items-center">
+            <img
+              src={GraphIcon} // GraphIconに変更
+              alt="取引価格"
+              style={{ width: "163px", height: "40px" }}
+            />
+            <p
+              className="text-sm"
+              style={{
+                width: "128px",
+                height: "40px",
+                lineHeight: "40px",
+                fontFamily: "Noto Sans JP",
+                fontSize: "32px",
+                fontWeight: 400,
+                color: "#FFFFFF",
+              }}
+            >
+              取引価格
+            </p>
+          </div>
+          {/* 取引面積セット */}
           <p
             className="text-sm"
             style={{
