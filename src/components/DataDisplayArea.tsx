@@ -226,6 +226,8 @@ const DataDisplayArea: React.FC = () => {
           const color2 = getGradient(ctx, chartArea, "#57544C", "#706D65"); // 全国平均用
           return context.dataIndex === 0 ? color1 : color2;
         },
+        maxBarThickness: 200, // バーの最大幅（px単位）
+        minBarLength: 200, // バーの最小幅（px単位）
       },
     ],
   };
