@@ -282,7 +282,7 @@ const DataDisplayArea: React.FC = () => {
 
   return (
     <div
-      className="flex flex-col p-4 gap-10"
+      className="flex flex-col gap-10"
       style={{
         backgroundColor: "#000000",
         backgroundImage: `url(${BackgroundImage})`,
@@ -290,7 +290,7 @@ const DataDisplayArea: React.FC = () => {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         width: "1920px",
-        height: "956px",
+        height: "100%",
         padding: "40px",
       }}
     >
