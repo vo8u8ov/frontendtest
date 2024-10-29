@@ -192,7 +192,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
               gap: "12px",
             }}
           >
-            <label className="flex items-center">
+            <label className="flex items-center" style={{ gap: "8px" }}>
               <input
                 type="radio"
                 value="landResidential"
@@ -202,7 +202,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
               />
               土地(住宅地)
             </label>
-            <label className="flex items-center mb-1">
+            <label className="flex items-center" style={{ gap: "8px" }}>
               <input
                 type="radio"
                 value="landCommercial"
@@ -212,7 +212,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
               />
               土地(商業地)
             </label>
-            <label className="flex items-center mb-1">
+            <label className="flex items-center" style={{ gap: "8px" }}>
               <input
                 type="radio"
                 value="usedApartment"
@@ -222,7 +222,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
               />
               中古マンション等
             </label>
-            <label className="flex items-center mb-1">
+            <label className="flex items-center" style={{ gap: "8px" }}>
               <input
                 type="radio"
                 value="farmland"
@@ -232,7 +232,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
               />
               農地
             </label>
-            <label className="flex items-center mb-1">
+            <label className="flex items-center" style={{ gap: "8px" }}>
               <input
                 type="radio"
                 value="forestLand"
