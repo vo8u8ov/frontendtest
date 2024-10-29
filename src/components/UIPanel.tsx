@@ -34,15 +34,44 @@ const UIPanel: React.FC<UIPanelProps> = ({
     }
   };
   return (
-    <div
-      className="w-full border p-4 rounded-sm text-black"
-      style={{ backgroundColor: "#f0f3f5" }}
-    >
+    <div>
       {/* 表示内容を選択 */}
-      <h3 className="text-lg mb-2">表示内容を選択</h3>
-      <hr className="border-gray-300 mb-4" />
+      <div
+        style={{
+          width: "100%",
+          height: "auto",
+          paddingBottom: "24px",
+        }}
+      >
+        {/* 子1の内容 */}
+        <p
+          style={{
+            width: "112px",
+            height: "24px",
+            lineHeight: "24px",
+            fontFamily: "Noto Sans JP",
+            fontSize: "16px",
+            fontWeight: 400,
+          }}
+        >
+          表示内容を選択
+        </p>
+      </div>
 
       {/* 場所 */}
+      {/* 子2 */}
+      <div
+        style={{
+          width: "auto",
+          height: "auto",
+          padding: "24px 0px",
+          borderTop: "1px solid transparent",
+          opacity: 0,
+        }}
+      >
+        {/* 子2の内容 */}
+      </div>
+
       <div className="flex items-center mb-4">
         <img
           src={MapIcon}
