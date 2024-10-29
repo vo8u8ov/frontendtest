@@ -162,66 +162,87 @@ const UIPanel: React.FC<UIPanelProps> = ({
       </div>
 
       {/* 表示タイプ */}
-      <div className="flex items-start mb-4">
-        <img
-          src={TypeIcon}
-          alt="Type Icon"
-          width="14"
-          height="14"
-          className="mr-2 text-gray-300"
-        />
-        <label className="w-1/6 mr-2">種類</label>
-        <div className="flex flex-col w-2/3">
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="landResidential"
-              checked={displayType === 1}
-              onChange={() => handleDisplayTypeChange(1)}
-              className="mr-2"
-            />
-            土地(住宅地)
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="landCommercial"
-              checked={displayType === 2}
-              onChange={() => handleDisplayTypeChange(2)}
-              className="mr-2"
-            />
-            土地(商業地)
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="usedApartment"
-              checked={displayType === 3}
-              onChange={() => handleDisplayTypeChange(3)}
-              className="mr-2"
-            />
-            中古マンション等
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="farmland"
-              checked={displayType === 4}
-              onChange={() => handleDisplayTypeChange(4)}
-              className="mr-2"
-            />
-            農地
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="forestLand"
-              checked={displayType === 5}
-              onChange={() => handleDisplayTypeChange(5)}
-              className="mr-2"
-            />
-            林地
-          </label>
+      <div
+        style={{
+          width: "311px",
+          height: "auto",
+          padding: "24px 0px 0px 0px",
+          borderTop: "1px solid #E5E5E5",
+          gap: "24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <img src={TypeIcon} alt="Type Icon" width="14" height="14" />
+            <label>種類</label>
+          </div>
+
+          <div
+            style={{
+              width: "239px",
+              height: "auto",
+              gap: "12px",
+            }}
+          >
+            <label className="flex items-center">
+              <input
+                type="radio"
+                value="landResidential"
+                checked={displayType === 1}
+                onChange={() => handleDisplayTypeChange(1)}
+                className="mr-2"
+              />
+              土地(住宅地)
+            </label>
+            <label className="flex items-center mb-1">
+              <input
+                type="radio"
+                value="landCommercial"
+                checked={displayType === 2}
+                onChange={() => handleDisplayTypeChange(2)}
+                className="mr-2"
+              />
+              土地(商業地)
+            </label>
+            <label className="flex items-center mb-1">
+              <input
+                type="radio"
+                value="usedApartment"
+                checked={displayType === 3}
+                onChange={() => handleDisplayTypeChange(3)}
+                className="mr-2"
+              />
+              中古マンション等
+            </label>
+            <label className="flex items-center mb-1">
+              <input
+                type="radio"
+                value="farmland"
+                checked={displayType === 4}
+                onChange={() => handleDisplayTypeChange(4)}
+                className="mr-2"
+              />
+              農地
+            </label>
+            <label className="flex items-center mb-1">
+              <input
+                type="radio"
+                value="forestLand"
+                checked={displayType === 5}
+                onChange={() => handleDisplayTypeChange(5)}
+                className="mr-2"
+              />
+              林地
+            </label>
+          </div>
         </div>
       </div>
       <div>
