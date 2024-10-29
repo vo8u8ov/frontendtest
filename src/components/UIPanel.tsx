@@ -47,8 +47,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <img
           src={MapIcon}
           alt="Map Icon"
-          width="20"
-          height="20"
+          width="11"
+          height="14"
           className="mr-2 text-gray-300"
         />
         <label className="w-1/3 mr-2">場所</label>
@@ -72,8 +72,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <img
           src={CalendarIcon}
           alt="Calendar Icon"
-          width="20"
-          height="20"
+          width="13"
+          height="14"
           className="mr-2 text-gray-300"
         />
         <label className="w-1/3 mr-2">年度</label>
@@ -97,8 +97,8 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <img
           src={TypeIcon}
           alt="Type Icon"
-          width="20"
-          height="20"
+          width="14"
+          height="14"
           className="mr-2 text-gray-300"
         />
         <label className="w-1/6 mr-2">種類</label>

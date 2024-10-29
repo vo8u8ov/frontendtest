@@ -352,8 +352,8 @@ const DataDisplayArea: React.FC = () => {
                       <img
                         src={MapIcon}
                         alt="Map Icon"
-                        width="20"
-                        height="20"
+                        width="14"
+                        height="18"
                         className="text-gray-300"
                       />
                       <span className="text-sm">{prefName}</span>
@@ -368,8 +368,8 @@ const DataDisplayArea: React.FC = () => {
                       <img
                         src={CalendarIcon}
                         alt="Calendar Icon"
-                        width="20"
-                        height="20"
+                        width="16"
+                        height="18"
                         className="text-gray-300"
                       />
                       <span className="text-sm">{selectedYear}</span>
@@ -384,8 +384,8 @@ const DataDisplayArea: React.FC = () => {
                       <img
                         src={TypeIcon}
                         alt="Type Icon"
-                        width="20"
-                        height="20"
+                        width="18"
+                        height="18"
                         className="text-gray-300"
                       />
                       <span className="text-sm">{displayTypeText}</span>
