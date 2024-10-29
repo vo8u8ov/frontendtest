@@ -284,6 +284,11 @@ const DataDisplayArea: React.FC = () => {
   return (
     <div
       style={{
+        backgroundColor: "#000000",
+        backgroundImage: `url(${BackgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
         width: "1920px",
         height: "956px",
         padding: "40px",
@@ -300,7 +305,76 @@ const DataDisplayArea: React.FC = () => {
           padding: "0 0 16px 0",
           borderBottom: "1px solid",
         }}
-      ></div>
+      >
+        {/* 取引価格セクション */}
+        <div
+          className="flex flex-col"
+          style={{
+            width: "1840px",
+            height: "auto",
+            padding: "0px 0px 16px 0px",
+            gap: "16px",
+            border: "0px 0px 1px 0px",
+            borderBottom: "1px solid #FFFFFF33",
+          }}
+        >
+          <div
+            className="flex items-center"
+            style={{
+              width: "auto",
+              height: "auto",
+              gap: "8px",
+            }}
+          >
+            <div
+              className="flex items-center"
+              style={{
+                width: "auto",
+                height: "auto",
+                padding: "0px 5px 0px 0px",
+                gap: "10px",
+              }}
+            >
+              <img
+                src={GraphIcon} // GraphIconに変更
+                alt="取引価格"
+                style={{ width: "27px", height: "30px" }}
+              />
+              <p
+                className="text-sm"
+                style={{
+                  width: "128px",
+                  height: "40px",
+                  lineHeight: "40px",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "32px",
+                  fontWeight: 400,
+                  color: "#FFFFFF",
+                }}
+              >
+                取引価格
+              </p>
+            </div>
+            <div className="flex items-center">
+              <p
+                style={{
+                  width: "131px",
+                  height: "21px",
+                  lineHeight: "20.57px",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "13.71px",
+                  fontWeight: 400,
+                  whiteSpace: "nowrap", // Prevent text wrapping
+                  overflow: "visible", // Allow overflow to be visible
+                  color: "#FFFFFF",
+                }}
+              >
+                ※取引面積1㎡あたり
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         style={{
           width: "1840px",
@@ -315,7 +389,100 @@ const DataDisplayArea: React.FC = () => {
             height: "780px",
             gap: "80px",
           }}
-        ></div>
+        >
+          {" "}
+          {/* {error ? (
+          <p className="text-red-500">{error}</p>
+        ) : ( */}
+          <div style={{ width: "713px", height: "446px" }}>
+            <div style={{ marginBottom: "40px" }}>
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  width: "498px",
+                  height: "30px",
+                  gap: "48px",
+                  margin: "0 auto", // 中央寄せ
+                }}
+              >
+                {/* MapIconとprefNameのセット */}
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img
+                    src={MapIcon}
+                    alt="Map Icon"
+                    width="14"
+                    height="18"
+                    className="text-gray-300"
+                  />
+                  <span className="text-sm">{prefName}</span>
+                </div>
+
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img
+                    src={CalendarIcon}
+                    alt="Calendar Icon"
+                    width="16"
+                    height="18"
+                    className="text-gray-300"
+                  />
+                  <span className="text-sm">{selectedYear}</span>
+                </div>
+
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img
+                    src={TypeIcon}
+                    alt="Type Icon"
+                    width="18"
+                    height="18"
+                    className="text-gray-300"
+                  />
+                  <span className="text-sm">{displayTypeText}</span>
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                marginLeft: "30px",
+                position: "relative",
+                bottom: "5px",
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "12px",
+                  fontWeight: 400,
+                  lineHeight: "12px",
+                  textAlign: "right",
+                  width: "fit-content",
+                  height: "fit-content",
+                }}
+              >
+                (円/㎡)
+              </span>
+            </div>
+            <Bar data={chartData} options={chartOptions} />
+          </div>
+          {/* )} */}
+        </div>
 
         <div
           style={{
@@ -324,7 +491,18 @@ const DataDisplayArea: React.FC = () => {
             padding: "24px",
             borderRadius: "4px",
           }}
-        ></div>
+        >
+          {" "}
+          <UIPanel
+            prefCode={prefCode}
+            selectedYear={selectedYear}
+            displayType={displayType}
+            handlePrefChange={handlePrefChange}
+            handlePrefNameChange={handlePrefNameChange}
+            handleYearChange={handleYearChange}
+            handleDisplayTypeChange={handleDisplayTypeChange}
+          />
+        </div>
       </div>
     </div>
   );
