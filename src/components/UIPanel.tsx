@@ -245,11 +245,36 @@ const UIPanel: React.FC<UIPanelProps> = ({
           </div>
         </div>
       </div>
-      <div>
+      <div
+        style={{
+          width: "311px",
+          height: "316px",
+          padding: "24px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div style={{ flexGrow: 1 }}> {/* 空のdivでスペースを埋める */}</div>
+
         <button
-          style={{ backgroundColor: "#0071c1" }}
-          className="mt-80 text-white py-2 px-4 rounded-sm hover:bg-blue-700 w-full"
           onClick={() => console.log("データをダウンロード")}
+          style={{
+            width: "100%", // Fill (311px)に対応
+            height: "52px", // Hug (52px)
+            padding: "13px 16px", // 指定されたパディング
+            borderRadius: "2px 0px 0px 0px", // 左上の角だけ丸く
+            backgroundColor: "#0071C1", // デフォルトの背景色
+            color: "#ffffff", // テキストの色
+            border: "none", // ボーダーを削除
+            cursor: "pointer", // カーソルをポインターに
+            transition: "background-color 0.3s", // ホバー時のスムーズな変化
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#005f99"; // ホバー時の色
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#0071C1"; // デフォルトの色に戻す
+          }}
         >
           データをダウンロード
         </button>
