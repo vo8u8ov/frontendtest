@@ -218,12 +218,12 @@ const DataDisplayArea: React.FC = () => {
 
           // chartAreaが未定義の場合はシンプルな色配列を返す
           if (!chartArea) {
-            return context.dataIndex === 0 ? "#97bf4a" : "#f8c471";
+            return context.dataIndex === 0 ? "#97BF4A" : "#f8c471";
           }
 
           // chartAreaが利用可能な場合はグラデーションを作成して返す
-          const color1 = getGradient(ctx, chartArea, "#97bf4a", "#009984"); // prefName用
-          const color2 = "#636058"; // 全国平均用
+          const color1 = getGradient(ctx, chartArea, "#97BF4A", "#009984"); // prefName用
+          const color2 = getGradient(ctx, chartArea, "#57544C", "#706D65"); // 全国平均用
           return context.dataIndex === 0 ? color1 : color2;
         },
       },
