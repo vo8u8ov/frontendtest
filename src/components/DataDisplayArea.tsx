@@ -331,41 +331,64 @@ const DataDisplayArea: React.FC = () => {
             ) : (
               <div style={{ width: "713px", height: "446px" }}>
                 <div style={{ marginBottom: "40px" }}>
-                  <span
-                    className="flex items-center justify-center w-[498px] h-[30px]"
+                  <div
+                    className="flex items-center justify-center"
                     style={{
+                      width: "498px",
+                      height: "30px",
+                      gap: "48px",
                       margin: "0 auto", // 中央寄せ
-                      display: "flex", // フレックスボックス
-                      alignItems: "center", // アイコンとテキストを縦方向で中央寄せ
-                      justifyContent: "center", // 横方向で中央寄せ
-                      gap: "48px", // 各要素間のスペースを48pxに設定
                     }}
                   >
-                    <img
-                      src={MapIcon}
-                      alt="Map Icon"
-                      width="20"
-                      height="20"
-                      className="text-gray-300"
-                    />
-                    <span>{prefName}</span>
-                    <img
-                      src={CalendarIcon}
-                      alt="Calendar Icon"
-                      width="20"
-                      height="20"
-                      className="text-gray-300"
-                    />
-                    <span>{selectedYear}年</span>
-                    <img
-                      src={TypeIcon}
-                      alt="Type Icon"
-                      width="20"
-                      height="20"
-                      className="text-gray-300"
-                    />
-                    <span>{displayTypeText}</span>
-                  </span>
+                    {/* MapIconとprefNameのセット */}
+                    <div
+                      className="flex items-center"
+                      style={{
+                        gap: "12px",
+                      }}
+                    >
+                      <img
+                        src={MapIcon}
+                        alt="Map Icon"
+                        width="20"
+                        height="20"
+                        className="text-gray-300"
+                      />
+                      <span className="text-sm">{prefName}</span>
+                    </div>
+
+                    <div
+                      className="flex items-center"
+                      style={{
+                        gap: "12px",
+                      }}
+                    >
+                      <img
+                        src={CalendarIcon}
+                        alt="Calendar Icon"
+                        width="20"
+                        height="20"
+                        className="text-gray-300"
+                      />
+                      <span className="text-sm">{selectedYear}</span>
+                    </div>
+
+                    <div
+                      className="flex items-center"
+                      style={{
+                        gap: "12px",
+                      }}
+                    >
+                      <img
+                        src={TypeIcon}
+                        alt="Type Icon"
+                        width="20"
+                        height="20"
+                        className="text-gray-300"
+                      />
+                      <span className="text-sm">{displayTypeText}</span>
+                    </div>
+                  </div>
                 </div>
                 <span
                   className="text-sm flex justify-start"
