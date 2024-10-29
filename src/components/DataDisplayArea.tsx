@@ -179,10 +179,10 @@ const DataDisplayArea: React.FC = () => {
     colorEnd: string
   ) => {
     const gradient = ctx.createLinearGradient(
-      0,
-      chartArea.bottom,
-      0,
-      chartArea.top
+      chartArea.right, // 右下
+      chartArea.bottom, // 右下
+      chartArea.left, // 左上
+      chartArea.top // 左上
     );
     gradient.addColorStop(0, colorStart); // 開始色: 緑
     gradient.addColorStop(1, colorEnd); // 終了色: 黄緑
