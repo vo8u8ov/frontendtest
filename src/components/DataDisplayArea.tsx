@@ -492,15 +492,7 @@ const DataDisplayArea: React.FC = () => {
             {/* )} */}
           </div>
         </div>
-        <div
-          style={{
-            width: "359px", //temp
-            height: "780px",
-            padding: "24px",
-            borderRadius: "4px",
-            backgroundColor: "#F0F3F5",
-          }}
-        >
+        <div>
           {" "}
           <UIPanel
             prefCode={prefCode}

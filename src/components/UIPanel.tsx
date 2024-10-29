@@ -34,16 +34,27 @@ const UIPanel: React.FC<UIPanelProps> = ({
     }
   };
   return (
-    <div>
+    <div
+      style={{
+        width: "359px", //temp
+        height: "780px",
+        padding: "24px",
+        borderRadius: "4px",
+        backgroundColor: "#F0F3F5",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       {/* 表示内容を選択 */}
       <div
         style={{
-          width: "100%",
+          width: "311px",
           height: "auto",
           paddingBottom: "24px",
+          gap: "24px",
         }}
       >
-        {/* 子1の内容 */}
         <p
           style={{
             width: "112px",
@@ -58,8 +69,6 @@ const UIPanel: React.FC<UIPanelProps> = ({
         </p>
       </div>
 
-      {/* 場所 */}
-      {/* 子2 */}
       <div
         style={{
           width: "auto",
@@ -68,9 +77,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
           borderTop: "1px solid transparent",
           opacity: 0,
         }}
-      >
-        {/* 子2の内容 */}
-      </div>
+      ></div>
 
       <div className="flex items-center mb-4">
         <img
