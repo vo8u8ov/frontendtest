@@ -68,6 +68,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         </p>
       </div>
 
+      {/* 場所 */}
       <div
         style={{
           width: "auto",
@@ -113,29 +114,52 @@ const UIPanel: React.FC<UIPanelProps> = ({
       </div>
 
       {/* 年度 */}
-      <div className="flex items-center mb-4">
-        <img
-          src={CalendarIcon}
-          alt="Calendar Icon"
-          width="13"
-          height="14"
-          className="mr-2 text-gray-300"
-        />
-        <label className="w-1/3 mr-2">年度</label>
-        <select
-          value={selectedYear}
-          onChange={(e) => handleYearChange(Number(e.target.value))}
-          style={{ width: "610px" }}
-          className="border border-gray-300 p-2 bg-white text-black w-2/3 rounded-sm"
+      <div
+        style={{
+          width: "auto",
+          height: "auto",
+          padding: "24px 0px",
+          borderTop: "1px solid #E5E5E5",
+          gap: "24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
         >
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <img
+              src={CalendarIcon}
+              alt="Calendar Icon"
+              width="13"
+              height="14"
+            />
+            <label>年度</label>
+          </div>
+          <select
+            value={selectedYear}
+            onChange={(e) => handleYearChange(Number(e.target.value))}
+            style={{
+              width: "240px",
+              height: "auto",
+              padding: "9px 12px 10px 12px",
+              borderRadius: "2px",
+            }}
+            className="border border-gray-300 bg-white text-black"
+          >
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <hr className="border-gray-300 mb-4" />
 
       {/* 表示タイプ */}
       <div className="flex items-start mb-4">
