@@ -390,106 +390,115 @@ const DataDisplayArea: React.FC = () => {
             gap: "80px",
           }}
         >
-          {" "}
           {/* {error ? (
           <p className="text-red-500">{error}</p>
         ) : ( */}
-          <div style={{ width: "713px", height: "446px" }}>
-            <div style={{ marginBottom: "40px" }}>
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  width: "498px",
-                  height: "30px",
-                  gap: "48px",
-                  margin: "0 auto", // 中央寄せ
-                }}
-              >
-                {/* MapIconとprefNameのセット */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center", // 横方向の中央寄せ
+              alignItems: "center", // 縦方向の中央寄せ
+              minHeight: "70vh", // 高さを設定
+            }}
+          >
+            {/* temp */}
+            <div style={{ width: "713px", height: "446px" }}>
+              <div>
                 <div
-                  className="flex items-center"
+                  className="flex items-center justify-center"
                   style={{
-                    gap: "12px",
+                    width: "498px",
+                    height: "30px",
+                    gap: "48px",
+                    margin: "0 auto", // 中央寄せ
                   }}
                 >
-                  <img
-                    src={MapIcon}
-                    alt="Map Icon"
-                    width="14"
-                    height="18"
-                    className="text-gray-300"
-                  />
-                  <span className="text-sm">{prefName}</span>
-                </div>
+                  {/* MapIconとprefNameのセット */}
+                  <div
+                    className="flex items-center"
+                    style={{
+                      gap: "12px",
+                    }}
+                  >
+                    <img
+                      src={MapIcon}
+                      alt="Map Icon"
+                      width="14"
+                      height="18"
+                      className="text-gray-300"
+                    />
+                    <span className="text-sm">{prefName}</span>
+                  </div>
 
-                <div
-                  className="flex items-center"
-                  style={{
-                    gap: "12px",
-                  }}
-                >
-                  <img
-                    src={CalendarIcon}
-                    alt="Calendar Icon"
-                    width="16"
-                    height="18"
-                    className="text-gray-300"
-                  />
-                  <span className="text-sm">{selectedYear}</span>
-                </div>
+                  <div
+                    className="flex items-center"
+                    style={{
+                      gap: "12px",
+                    }}
+                  >
+                    <img
+                      src={CalendarIcon}
+                      alt="Calendar Icon"
+                      width="16"
+                      height="18"
+                      className="text-gray-300"
+                    />
+                    <span className="text-sm">{selectedYear}</span>
+                  </div>
 
-                <div
-                  className="flex items-center"
-                  style={{
-                    gap: "12px",
-                  }}
-                >
-                  <img
-                    src={TypeIcon}
-                    alt="Type Icon"
-                    width="18"
-                    height="18"
-                    className="text-gray-300"
-                  />
-                  <span className="text-sm">{displayTypeText}</span>
+                  <div
+                    className="flex items-center"
+                    style={{
+                      gap: "12px",
+                    }}
+                  >
+                    <img
+                      src={TypeIcon}
+                      alt="Type Icon"
+                      width="18"
+                      height="18"
+                      className="text-gray-300"
+                    />
+                    <span className="text-sm">{displayTypeText}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                marginLeft: "30px",
-                position: "relative",
-                bottom: "5px",
-              }}
-            >
-              <span
+              <div
                 style={{
-                  fontFamily: "Noto Sans JP",
-                  fontSize: "12px",
-                  fontWeight: 400,
-                  lineHeight: "12px",
-                  textAlign: "right",
-                  width: "fit-content",
-                  height: "fit-content",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  marginLeft: "30px",
+                  position: "relative",
+                  bottom: "5px",
                 }}
               >
-                (円/㎡)
-              </span>
+                <span
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontSize: "12px",
+                    fontWeight: 400,
+                    lineHeight: "12px",
+                    textAlign: "right",
+                    width: "fit-content",
+                    height: "fit-content",
+                  }}
+                >
+                  (円/㎡)
+                </span>
+              </div>
+              <Bar data={chartData} options={chartOptions} />
             </div>
-            <Bar data={chartData} options={chartOptions} />
+            {/* )} */}
           </div>
-          {/* )} */}
         </div>
-
         <div
           style={{
             width: "359px", //temp
             height: "780px",
             padding: "24px",
             borderRadius: "4px",
+            backgroundColor: "#F0F3F5",
           }}
         >
           {" "}
