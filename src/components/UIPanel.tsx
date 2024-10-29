@@ -43,7 +43,6 @@ const UIPanel: React.FC<UIPanelProps> = ({
         backgroundColor: "#F0F3F5",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
       }}
     >
       {/* 表示内容を選択 */}
@@ -74,34 +73,44 @@ const UIPanel: React.FC<UIPanelProps> = ({
           width: "auto",
           height: "auto",
           padding: "24px 0px",
-          borderTop: "1px solid transparent",
-          opacity: 0,
+          borderTop: "1px solid #E5E5E5",
+          gap: "24px",
         }}
-      ></div>
-
-      <div className="flex items-center mb-4">
-        <img
-          src={MapIcon}
-          alt="Map Icon"
-          width="11"
-          height="14"
-          className="mr-2 text-gray-300"
-        />
-        <label className="w-1/3 mr-2">場所</label>
-        <select
-          value={prefCode}
-          onChange={(e) => handlePrefChangeWithPrefName(Number(e.target.value))}
-          style={{ width: "610px" }}
-          className="border border-gray-300 p-2 bg-white text-black w-2/3 rounded-sm"
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
         >
-          {prefectures.map((pref) => (
-            <option key={pref.code} value={pref.code}>
-              {pref.name}
-            </option>
-          ))}
-        </select>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <img src={MapIcon} alt="Map Icon" width="11" height="14" />
+            <label>場所</label>
+          </div>
+          <select
+            value={prefCode}
+            onChange={(e) =>
+              handlePrefChangeWithPrefName(Number(e.target.value))
+            }
+            style={{
+              width: "240px",
+              height: "auto",
+              padding: "9px 12px 10px 12px",
+              borderRadius: "2px",
+            }}
+            className="border border-gray-300 bg-white text-black"
+          >
+            {prefectures.map((pref) => (
+              <option key={pref.code} value={pref.code}>
+                {pref.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <hr className="border-gray-300 mb-4" />
 
       {/* 年度 */}
       <div className="flex items-center mb-4">
