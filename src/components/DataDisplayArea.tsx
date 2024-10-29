@@ -242,7 +242,6 @@ const DataDisplayArea: React.FC = () => {
       y: {
         title: {
           display: true,
-          text: "円/㎡",
           font: {
             size: 12,
           },
@@ -364,6 +363,16 @@ const DataDisplayArea: React.FC = () => {
                     <span>{displayTypeText}</span>
                   </span>
                 </div>
+                <span
+                  className="text-sm flex justify-start"
+                  style={{
+                    marginLeft: "30px",
+                    position: "relative",
+                    bottom: "5px",
+                  }}
+                >
+                  (円/㎡)
+                </span>
                 <Bar data={chartData} options={chartOptions} />
               </div>
             )}
