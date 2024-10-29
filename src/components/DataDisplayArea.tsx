@@ -308,13 +308,29 @@ const DataDisplayArea: React.FC = () => {
             borderBottom: "1px solid #FFFFFF33",
           }}
         >
-          {/* 取引価格セット */}
-          <div className="flex items-center">
-            <img
-              src={GraphIcon} // GraphIconに変更
-              alt="取引価格"
-              style={{ width: "163px", height: "40px" }}
-            />
+          <div
+            className="flex items-center"
+            style={{
+              width: "auto",
+              height: "auto",
+              gap: "8px",
+            }}
+          >
+            <div
+              className="flex items-center"
+              style={{
+                width: "auto",
+                height: "auto",
+                padding: "0px 5px 0px 0px",
+                gap: "10px",
+              }}
+            >
+              <img
+                src={GraphIcon} // GraphIconに変更
+                alt="取引価格"
+                style={{ width: "27px", height: "30px" }}
+              />
+            </div>
             <p
               className="text-sm"
               style={{
@@ -330,7 +346,6 @@ const DataDisplayArea: React.FC = () => {
               取引価格
             </p>
           </div>
-          {/* 取引面積セット */}
           <p
             className="text-sm"
             style={{
