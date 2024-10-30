@@ -36,7 +36,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
   return (
     <div
       style={{
-        width: "359px", //temp
+        width: "auto",
         height: "780px",
         padding: "24px",
         borderRadius: "4px",
@@ -249,18 +249,18 @@ const UIPanel: React.FC<UIPanelProps> = ({
         style={{
           width: "311px",
           height: "316px",
-          padding: "24px",
-          display: "flex",
-          flexDirection: "column",
+          padding: "24px 0px 0px 0px",
+          display: "flex", // フレックスボックスを使用
+          flexDirection: "column", // 縦に並べる
+          justifyContent: "flex-end", // ボタンを下部に配置
+          gap: "24px",
         }}
       >
-        <div style={{ flexGrow: 1 }}> {/* 空のdivでスペースを埋める */}</div>
-
         <button
           onClick={() => console.log("データをダウンロード")}
           style={{
-            width: "100%", // Fill (311px)に対応
-            height: "52px", // Hug (52px)
+            width: "311px",
+            height: "auto",
             padding: "13px 16px", // 指定されたパディング
             borderRadius: "2px 0px 0px 0px", // 左上の角だけ丸く
             backgroundColor: "#0071C1", // デフォルトの背景色
