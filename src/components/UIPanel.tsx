@@ -1,7 +1,10 @@
 // src/components/UIPanel.tsx
-import React from "react";
+import React, { useState } from "react";
 import { years } from "../years";
 import { prefectures } from "../prefectures";
+import MapIcon from "../marker.svg";
+import CalendarIcon from "../calendar-check.svg";
+import TypeIcon from "../resources.svg";
 
 interface UIPanelProps {
   prefCode: number;
@@ -13,54 +16,6 @@ interface UIPanelProps {
   handleDisplayTypeChange: (type: number) => void;
 }
 
-const MapIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="none"
-    viewBox="0 0 24 24"
-    className="mr-2 text-gray-300"
-  >
-    <path
-      fill="currentColor"
-      d="M12 2C10.343 2 9 3.343 9 5c0 .182.018.357.052.529C6.353 6.434 4 8.716 4 11.5 4 14.365 7.582 17 12 17s8-2.635 8-5.5c0-2.784-2.353-5.066-5.052-5.971C12.982 2.357 12 2 12 2z"
-    />
-  </svg>
-);
-
-const CalendarIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="none"
-    viewBox="0 0 24 24"
-    className="mr-2 text-gray-300"
-  >
-    <path
-      fill="currentColor"
-      d="M19 3h-2V1h-2v2H7V1H5v2H1v16h22V3h-4zm0 18H5V8h14v13z"
-    />
-  </svg>
-);
-
-const TypeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="none"
-    viewBox="0 0 24 24"
-    className="mr-2 text-gray-300"
-  >
-    <path
-      fill="currentColor"
-      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v8z"
-    />
-  </svg>
-);
-
 const UIPanel: React.FC<UIPanelProps> = ({
   prefCode,
   selectedYear,
@@ -70,115 +25,263 @@ const UIPanel: React.FC<UIPanelProps> = ({
   handleYearChange,
   handleDisplayTypeChange,
 }) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   // 都道府県コードが変更された時の処理
   const handlePrefChangeWithPrefName = (code: number) => {
-    handlePrefChange(code);
-    const selectedPref = prefectures.find((pref) => pref.code === code);
-    if (selectedPref) {
-      handlePrefNameChange(selectedPref.name); // 日本語名を渡す
+    try {
+      handlePrefChange(code);
+      const selectedPref = prefectures.find((pref) => pref.code === code);
+      if (selectedPref) {
+        handlePrefNameChange(selectedPref.name); // 日本語名を渡す
+      }
+    } catch (error) {
+      setErrorMessage((error as Error).message);
+      console.error("都道府県変更中にエラーが発生:", error);
     }
   };
   return (
-    <div className="w-full border bg-gray-700  p-4 rounded-lg">
+    <div
+      style={{
+        width: "auto",
+        height: "780px",
+        padding: "24px",
+        borderRadius: "4px",
+        backgroundColor: "#F0F3F5",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {/* 表示内容を選択 */}
-      <h3 className="text-lg font-bold mb-2">表示内容を選択</h3>
-      <hr className="border-gray-500 mb-4" />
+      <div
+        style={{
+          width: "311px",
+          height: "auto",
+          paddingBottom: "24px",
+          gap: "24px",
+        }}
+      >
+        <p
+          style={{
+            width: "112px",
+            height: "24px",
+            lineHeight: "24px",
+            fontFamily: "Noto Sans JP",
+            fontSize: "16px",
+            fontWeight: 400,
+          }}
+        >
+          表示内容を選択
+        </p>
+      </div>
 
       {/* 場所 */}
-      <div className="flex items-center mb-4">
-        <MapIcon />
-        <label className="w-1/3 mr-2">場所</label>
-        <select
-          value={prefCode}
-          onChange={(e) => handlePrefChangeWithPrefName(Number(e.target.value))}
-          className="border border-gray-300 p-2 bg-gray-600 w-2/3"
+      <div
+        style={{
+          width: "auto",
+          height: "auto",
+          padding: "24px 0px",
+          borderTop: "1px solid #E5E5E5",
+          gap: "24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
         >
-          {prefectures.map((pref) => (
-            <option key={pref.code} value={pref.code}>
-              {pref.name}
-            </option>
-          ))}
-        </select>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <img src={MapIcon} alt="Map Icon" width="11" height="14" />
+            <label>場所</label>
+          </div>
+          <select
+            value={prefCode}
+            onChange={(e) =>
+              handlePrefChangeWithPrefName(Number(e.target.value))
+            }
+            style={{
+              width: "240px",
+              height: "auto",
+              padding: "9px 12px 10px 12px",
+              borderRadius: "2px",
+            }}
+            className="border border-gray-300 bg-white text-black"
+          >
+            {prefectures.map((pref) => (
+              <option key={pref.code} value={pref.code}>
+                {pref.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* 年度 */}
-      <div className="flex items-center mb-4">
-        <CalendarIcon />
-        <label className="w-1/3 mr-2">年度</label>
-        <select
-          value={selectedYear}
-          onChange={(e) => handleYearChange(Number(e.target.value))}
-          className="border border-gray-300 p-2 bg-gray-600 w-2/3"
+      <div
+        style={{
+          width: "auto",
+          height: "auto",
+          padding: "24px 0px",
+          borderTop: "1px solid #E5E5E5",
+          gap: "24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
         >
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <img
+              src={CalendarIcon}
+              alt="Calendar Icon"
+              width="13"
+              height="14"
+            />
+            <label>年度</label>
+          </div>
+          <select
+            value={selectedYear}
+            onChange={(e) => handleYearChange(Number(e.target.value))}
+            style={{
+              width: "240px",
+              height: "auto",
+              padding: "9px 12px 10px 12px",
+              borderRadius: "2px",
+            }}
+            className="border border-gray-300 bg-white text-black"
+          >
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* 表示タイプ */}
-      <div className="flex items-start mb-4">
-        <TypeIcon />
-        <label className="w-1/3 mr-2">種類</label>
-        <div className="flex flex-col w-2/3">
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="landResidential"
-              checked={displayType === 1}
-              onChange={() => handleDisplayTypeChange(1)}
-              className="mr-2"
-            />
-            土地(住宅地)
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="landCommercial"
-              checked={displayType === 2}
-              onChange={() => handleDisplayTypeChange(2)}
-              className="mr-2"
-            />
-            土地(商業地)
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="usedApartment"
-              checked={displayType === 3}
-              onChange={() => handleDisplayTypeChange(3)}
-              className="mr-2"
-            />
-            中古マンション等
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="farmland"
-              checked={displayType === 4}
-              onChange={() => handleDisplayTypeChange(4)}
-              className="mr-2"
-            />
-            農地
-          </label>
-          <label className="flex items-center mb-1">
-            <input
-              type="radio"
-              value="forestLand"
-              checked={displayType === 5}
-              onChange={() => handleDisplayTypeChange(5)}
-              className="mr-2"
-            />
-            林地
-          </label>
+      <div
+        style={{
+          width: "311px",
+          height: "auto",
+          padding: "24px 0px 0px 0px",
+          borderTop: "1px solid #E5E5E5",
+          gap: "24px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "4px",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <img src={TypeIcon} alt="Type Icon" width="14" height="14" />
+            <label>種類</label>
+          </div>
+
+          <div
+            style={{
+              width: "239px",
+              height: "auto",
+              gap: "12px",
+            }}
+          >
+            <label className="flex items-center" style={{ gap: "8px" }}>
+              <input
+                type="radio"
+                value="landResidential"
+                checked={displayType === 1}
+                onChange={() => handleDisplayTypeChange(1)}
+                className="mr-2"
+              />
+              土地(住宅地)
+            </label>
+            <label className="flex items-center" style={{ gap: "8px" }}>
+              <input
+                type="radio"
+                value="landCommercial"
+                checked={displayType === 2}
+                onChange={() => handleDisplayTypeChange(2)}
+                className="mr-2"
+              />
+              土地(商業地)
+            </label>
+            <label className="flex items-center" style={{ gap: "8px" }}>
+              <input
+                type="radio"
+                value="usedApartment"
+                checked={displayType === 3}
+                onChange={() => handleDisplayTypeChange(3)}
+                className="mr-2"
+              />
+              中古マンション等
+            </label>
+            <label className="flex items-center" style={{ gap: "8px" }}>
+              <input
+                type="radio"
+                value="farmland"
+                checked={displayType === 4}
+                onChange={() => handleDisplayTypeChange(4)}
+                className="mr-2"
+              />
+              農地
+            </label>
+            <label className="flex items-center" style={{ gap: "8px" }}>
+              <input
+                type="radio"
+                value="forestLand"
+                checked={displayType === 5}
+                onChange={() => handleDisplayTypeChange(5)}
+                className="mr-2"
+              />
+              林地
+            </label>
+          </div>
         </div>
       </div>
-      <div>
+      <div
+        style={{
+          width: "311px",
+          height: "316px",
+          padding: "24px 0px 0px 0px",
+          display: "flex", // フレックスボックスを使用
+          flexDirection: "column", // 縦に並べる
+          justifyContent: "flex-end", // ボタンを下部に配置
+          gap: "24px",
+        }}
+      >
         <button
-          className="bg-blue-600 mt-80 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 w-full"
-          onClick={() => console.log("データをダウンロード")} // クリック時の動作（仮実装）
+          onClick={() => console.log("データをダウンロード")}
+          style={{
+            width: "311px",
+            height: "auto",
+            padding: "13px 16px", // 指定されたパディング
+            borderRadius: "2px 0px 0px 0px", // 左上の角だけ丸く
+            backgroundColor: "#0071C1", // デフォルトの背景色
+            color: "#ffffff", // テキストの色
+            border: "none", // ボーダーを削除
+            cursor: "pointer", // カーソルをポインターに
+            transition: "background-color 0.3s", // ホバー時のスムーズな変化
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#005f99"; // ホバー時の色
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#0071C1"; // デフォルトの色に戻す
+          }}
         >
           データをダウンロード
         </button>

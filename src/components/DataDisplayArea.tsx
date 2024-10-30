@@ -12,6 +12,12 @@ import {
 } from "chart.js";
 import { saveDataToFirebase, fetchDataFromFirebase } from "../api";
 import { EstateTransactionResponse } from "../types";
+import BackgroundImage from "../backgroundimage.svg";
+import Frame1395 from "../Frame1395.svg";
+import MapIcon from "../marker2.svg";
+import CalendarIcon from "../calendar-check2.svg";
+import TypeIcon from "../resources2.svg";
+import GraphIcon from "../graphicon.svg";
 
 // Chart.jsのコンポーネントを登録
 ChartJS.register(
@@ -37,8 +43,7 @@ const DataDisplayArea: React.FC = () => {
   useEffect(() => {
     const fetchAndCacheData = async () => {
       try {
-        console.log("トライ");
-
+        setError(null); // エラー状態をリセット
         // すべての都道府県データを取得
         const allPrefData: Record<number, EstateTransactionResponse> = {};
         const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
@@ -58,7 +63,6 @@ const DataDisplayArea: React.FC = () => {
               if (!apiData) {
                 console.log("データがないため保存:", i);
                 await saveDataToFirebase(i, displayType, selectedYear);
-
                 // Firebaseから最新データを再取得
                 const latestApiData = await fetchDataFromFirebase(
                   i,
@@ -66,16 +70,13 @@ const DataDisplayArea: React.FC = () => {
                   selectedYear
                 );
 
-                console.log("latestApiData:", latestApiData);
                 if (latestApiData) {
                   allPrefData[i] = latestApiData;
-
                   // localStorageに最新データを保存
                   localStorage.setItem(
                     `prefData_${i}_${displayType}_${selectedYear}`,
                     JSON.stringify(allPrefData[i]) // allPrefData[i]を保存
                   );
-
                   console.log(
                     "APIからデータ取得してローカルストレージに保存:",
                     i
@@ -97,13 +98,14 @@ const DataDisplayArea: React.FC = () => {
             }
           }
         );
-
         // すべての都道府県のデータ取得の完了を待つ
         await Promise.all(fetchPromises);
-        console.log("都道府県データ：", allPrefData);
-
         // 全国平均の計算
         let totalValue = 0;
+
+        if (Object.keys(allPrefData).length !== 47) {
+          throw new Error("Error: 都道府県データが揃っていない");
+        }
 
         for (let i = 1; i <= 47; i++) {
           const yearData = allPrefData[i]?.years.find(
@@ -113,15 +115,12 @@ const DataDisplayArea: React.FC = () => {
             totalValue += yearData.value;
           }
         }
-
         let averagePrice = totalValue / 47;
         setAveragePrice(averagePrice);
-        console.log("平均価格", averagePrice);
-
         // 現在選択されている都道府県のデータを取得
         if (allPrefData[prefCode]) {
           setEstateData(allPrefData[prefCode]);
-          console.log("キャッシュデータを使用:", allPrefData[prefCode]);
+          console.log("キャッシュデータを使用");
         } else {
           console.log("現在の都道府県のデータが見つからなかったため保存します");
           const apiData = await fetchDataFromFirebase(
@@ -144,7 +143,6 @@ const DataDisplayArea: React.FC = () => {
         setError("データ取得に失敗しました。");
       }
     };
-
     fetchAndCacheData();
   }, [prefCode, displayType, selectedYear]);
 
@@ -180,6 +178,24 @@ const DataDisplayArea: React.FC = () => {
       ? "林地"
       : "";
 
+  // グラデーションを生成する関数
+  const getGradient = (
+    ctx: CanvasRenderingContext2D,
+    chartArea: { left: number; right: number; top: number; bottom: number },
+    colorStart: string,
+    colorEnd: string
+  ) => {
+    const gradient = ctx.createLinearGradient(
+      chartArea.right, // 右下
+      chartArea.bottom, // 右下
+      chartArea.left, // 左上
+      chartArea.top // 左上
+    );
+    gradient.addColorStop(0, colorStart); // 開始色: 緑
+    gradient.addColorStop(1, colorEnd); // 終了色: 黄緑
+    return gradient;
+  };
+
   // グラフのデータと設定
   const chartData = {
     labels: [prefName, "全国平均"],
@@ -193,7 +209,32 @@ const DataDisplayArea: React.FC = () => {
             : 0,
           averagePrice,
         ],
-        backgroundColor: ["#4C9F70", "#FF6347"],
+        backgroundColor: (context: {
+          chart: {
+            ctx: CanvasRenderingContext2D;
+            chartArea: {
+              left: number;
+              right: number;
+              top: number;
+              bottom: number;
+            } | null;
+          };
+          dataIndex: number;
+        }) => {
+          const { ctx, chartArea } = context.chart;
+
+          // chartAreaが未定義の場合はシンプルな色配列を返す
+          if (!chartArea) {
+            return context.dataIndex === 0 ? "#97BF4A" : "#f8c471";
+          }
+
+          // chartAreaが利用可能な場合はグラデーションを作成して返す
+          const color1 = getGradient(ctx, chartArea, "#97BF4A", "#009984"); // prefName用
+          const color2 = getGradient(ctx, chartArea, "#57544C", "#706D65"); // 全国平均用
+          return context.dataIndex === 0 ? color1 : color2;
+        },
+        maxBarThickness: 200, // バーの最大幅（px単位）
+        minBarLength: 200, // バーの最小幅（px単位）
       },
     ],
   };
@@ -210,10 +251,10 @@ const DataDisplayArea: React.FC = () => {
       y: {
         title: {
           display: true,
-          text: "円/㎡",
           font: {
             size: 12,
           },
+          color: "rgba(255, 255, 255, 1)",
         },
         grid: {
           drawOnChartArea: false, // グリッド線をチャートエリアには描画しない
@@ -221,9 +262,13 @@ const DataDisplayArea: React.FC = () => {
           lineWidth: 1, // グリッド線の太さを設定
         },
         ticks: {
+          color: "rgba(255, 255, 255, 1)",
           font: {
-            size: 10,
+            size: 12,
+            family: "Noto Sans JP",
+            weight: 400,
           },
+          padding: 8,
         },
         border: {
           color: "rgba(255, 255, 255, 1)", // Y軸の外側の線の色
@@ -232,8 +277,11 @@ const DataDisplayArea: React.FC = () => {
       },
       x: {
         ticks: {
+          color: "rgba(255, 255, 255, 1)",
           font: {
-            size: 10,
+            size: 16,
+            family: "Noto Sans JP",
+            weight: 700,
           },
         },
         border: {
@@ -245,34 +293,285 @@ const DataDisplayArea: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col p-4">
-      {/* 取引価格セクション */}
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold flex items-center">
-          <span className="mr-2">📊</span>
-          取引価格
-        </h2>
-        <p className="text-sm mt-1">※取引面積1㎡あたり</p>
-        <hr className="my-2 border-gray-600" />
-      </div>
-
-      <div className="flex flex-col sm:flex-row justify-between mt-4 items-center">
-        <div className="flex-grow flex justify-center">
-          {error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <div style={{ width: "50%", height: "500px" }}>
-              <div className="text-center mb-2">
-                <span className="text-lg font-semibold">
-                  {prefName} {selectedYear}年 {displayTypeText}
-                </span>
-              </div>
-              <Bar data={chartData} options={chartOptions} />
+    <div
+      style={{
+        backgroundColor: "#000000",
+        backgroundImage: `url(${BackgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        width: "1920px",
+        height: "956px",
+        padding: "40px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        gap: "40px",
+      }}
+    >
+      <div
+        style={{
+          width: "1840px",
+          height: "56px",
+          padding: "0 0 16px 0",
+          borderBottom: "1px solid",
+        }}
+      >
+        {/* 取引価格セクション */}
+        <div
+          className="flex flex-col"
+          style={{
+            width: "1840px",
+            height: "auto",
+            padding: "0px 0px 16px 0px",
+            gap: "16px",
+            border: "0px 0px 1px 0px",
+            borderBottom: "1px solid #FFFFFF33",
+          }}
+        >
+          <div
+            className="flex items-center"
+            style={{
+              width: "auto",
+              height: "auto",
+              gap: "8px",
+            }}
+          >
+            <div
+              className="flex items-center"
+              style={{
+                width: "auto",
+                height: "auto",
+                padding: "0px 5px 0px 0px",
+                gap: "10px",
+              }}
+            >
+              <img
+                src={GraphIcon} // GraphIconに変更
+                alt="取引価格"
+                style={{ width: "27px", height: "30px" }}
+              />
+              <p
+                className="text-sm"
+                style={{
+                  width: "128px",
+                  height: "40px",
+                  lineHeight: "40px",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "32px",
+                  fontWeight: 400,
+                  color: "#FFFFFF",
+                }}
+              >
+                取引価格
+              </p>
             </div>
-          )}
+            <div className="flex items-center mt-4">
+              <p
+                style={{
+                  width: "131px",
+                  height: "21px",
+                  lineHeight: "20.57px",
+                  fontFamily: "Noto Sans JP",
+                  fontSize: "13.71px",
+                  fontWeight: 400,
+                  whiteSpace: "nowrap", // Prevent text wrapping
+                  overflow: "visible", // Allow overflow to be visible
+                  color: "#FFFFFF",
+                }}
+              >
+                ※取引面積1㎡あたり
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="w-full sm:w-1/4">
-          {/* UIPanelをリスポンシブにする */}
+      </div>
+      <div
+        style={{
+          width: "1840px",
+          height: "780px",
+          display: "flex",
+          gap: "24px",
+        }}
+      >
+        <div
+          style={{
+            width: "1457px",
+            height: "780px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "80px",
+          }}
+        >
+          {/* {error ? (
+          <p className="text-red-500">{error}</p>
+        ) : ( */}
+          <div
+            style={{
+              width: "1457px",
+              height: "780px",
+              display: "flex",
+              justifyContent: "center", // 横方向の中央寄せ
+              alignItems: "center", // 縦方向の中央寄せ
+            }}
+          >
+            {/* 子1と子2をラップするコンテナ */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column", // 子1と子2を縦並びにする
+                gap: "48px",
+              }}
+            >
+              {/* 子1 */}
+              <div
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  display: "flex",
+                  gap: "48px",
+                  justifyContent: "center",
+                }}
+              >
+                {/* MapIconとprefNameのセット */}
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img src={MapIcon} alt="Map Icon" width="14" height="18" />
+
+                  <p
+                    style={{
+                      width: "72px",
+                      height: "30px",
+                      lineHeight: "30px",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "24px",
+                      fontWeight: 400,
+                      color: "#FFFFFF",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {prefName}
+                  </p>
+                </div>
+                {/* CalendarIconとselectedYearのセット */}
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img
+                    src={CalendarIcon}
+                    alt="Map Icon"
+                    width="14"
+                    height="18"
+                  />
+
+                  <p
+                    style={{
+                      width: "72px",
+                      height: "30px",
+                      lineHeight: "30px",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "24px",
+                      fontWeight: 400,
+                      color: "#FFFFFF",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {selectedYear}年
+                  </p>
+                </div>
+                {/* TypeIconとdisplayTypeTextのセット */}
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img src={TypeIcon} alt="Map Icon" width="14" height="18" />
+
+                  <p
+                    style={{
+                      width: "72px",
+                      height: "30px",
+                      lineHeight: "30px",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "24px",
+                      fontWeight: 400,
+                      color: "#FFFFFF",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {displayTypeText}
+                  </p>
+                </div>
+              </div>
+
+              {/* 子2 */}
+              <div
+                style={{
+                  width: "53px",
+                  height: "12px",
+                  gap: "8px",
+                  marginLeft: "35px",
+                  marginBottom: "-50px",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontSize: "12px",
+                    fontWeight: 400,
+                    lineHeight: "12px",
+                    textAlign: "right",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  (円/㎡)
+                </p>
+              </div>
+
+              {/* 子3 */}
+              <div
+                style={{
+                  width: "auto",
+                  height: "auto",
+                }}
+              >
+                {error ? (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "20px",
+                      textAlign: "center",
+                      marginTop: "30%",
+                    }}
+                  >
+                    {error}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      width: "660px", // temp
+                      height: "446px", // 高さを446pxに固定
+                      padding: "0px 0px 5px 0px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Bar data={chartData} options={chartOptions} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          {" "}
           <UIPanel
             prefCode={prefCode}
             selectedYear={selectedYear}
