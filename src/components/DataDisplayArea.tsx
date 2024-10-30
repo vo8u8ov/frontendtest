@@ -440,19 +440,25 @@ const DataDisplayArea: React.FC = () => {
                       fontSize: "24px",
                       fontWeight: 400,
                       color: "#FFFFFF",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {prefName}
                   </p>
                 </div>
-                {/* MapIconとprefNameのセット */}
+                {/* CalendarIconとselectedYearのセット */}
                 <div
                   className="flex items-center"
                   style={{
                     gap: "12px",
                   }}
                 >
-                  <img src={MapIcon} alt="Map Icon" width="14" height="18" />
+                  <img
+                    src={CalendarIcon}
+                    alt="Map Icon"
+                    width="14"
+                    height="18"
+                  />
 
                   <p
                     style={{
@@ -463,19 +469,20 @@ const DataDisplayArea: React.FC = () => {
                       fontSize: "24px",
                       fontWeight: 400,
                       color: "#FFFFFF",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    {prefName}
+                    {selectedYear}年
                   </p>
                 </div>
-                {/* MapIconとprefNameのセット */}
+                {/* TypeIconとdisplayTypeTextのセット */}
                 <div
                   className="flex items-center"
                   style={{
                     gap: "12px",
                   }}
                 >
-                  <img src={MapIcon} alt="Map Icon" width="14" height="18" />
+                  <img src={TypeIcon} alt="Map Icon" width="14" height="18" />
 
                   <p
                     style={{
@@ -486,9 +493,10 @@ const DataDisplayArea: React.FC = () => {
                       fontSize: "24px",
                       fontWeight: 400,
                       color: "#FFFFFF",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    {prefName}
+                    {displayTypeText}
                   </p>
                 </div>
               </div>
