@@ -1,5 +1,5 @@
 // src/components/UIPanel.tsx
-import React from "react";
+import React, { useState } from "react";
 import { years } from "../years";
 import { prefectures } from "../prefectures";
 import MapIcon from "../marker.svg";
@@ -25,12 +25,19 @@ const UIPanel: React.FC<UIPanelProps> = ({
   handleYearChange,
   handleDisplayTypeChange,
 }) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   // 都道府県コードが変更された時の処理
   const handlePrefChangeWithPrefName = (code: number) => {
-    handlePrefChange(code);
-    const selectedPref = prefectures.find((pref) => pref.code === code);
-    if (selectedPref) {
-      handlePrefNameChange(selectedPref.name); // 日本語名を渡す
+    try {
+      handlePrefChange(code);
+      const selectedPref = prefectures.find((pref) => pref.code === code);
+      if (selectedPref) {
+        handlePrefNameChange(selectedPref.name); // 日本語名を渡す
+      }
+    } catch (error) {
+      setErrorMessage((error as Error).message);
+      console.error("都道府県変更中にエラーが発生:", error);
     }
   };
   return (
