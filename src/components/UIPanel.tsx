@@ -181,7 +181,7 @@ const UIPanel: React.FC<UIPanelProps> = ({
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             gap: "4px",
             width: "100%",
             justifyContent: "space-between",
