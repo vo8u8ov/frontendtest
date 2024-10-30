@@ -258,8 +258,11 @@ const DataDisplayArea: React.FC = () => {
         ticks: {
           color: "rgba(255, 255, 255, 1)",
           font: {
-            size: 10,
+            size: 12,
+            family: "Noto Sans JP",
+            weight: 400,
           },
+          padding: 8,
         },
         border: {
           color: "rgba(255, 255, 255, 1)", // Y軸の外側の線の色
@@ -508,8 +511,9 @@ const DataDisplayArea: React.FC = () => {
                 style={{
                   width: "53px",
                   height: "12px",
-                  marginLeft: "15px",
-                  marginBottom: "-30px",
+                  gap: "8px",
+                  marginLeft: "35px",
+                  marginBottom: "-50px",
                 }}
               >
                 <p
