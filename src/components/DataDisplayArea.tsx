@@ -102,6 +102,14 @@ const DataDisplayArea: React.FC = () => {
         await Promise.all(fetchPromises);
         // 全国平均の計算
         let totalValue = 0;
+
+        if (Object.keys(allPrefData).length !== 47) {
+          console.log("エラー");
+          throw new Error(
+            "Error: allPrefData should contain exactly 47 entries."
+          );
+        }
+
         for (let i = 1; i <= 47; i++) {
           const yearData = allPrefData[i]?.years.find(
             (year) => year.year === selectedYear
