@@ -419,7 +419,29 @@ const DataDisplayArea: React.FC = () => {
                   height: "auto",
                 }}
               >
-                <span>コンテンツ1</span>
+                {/* MapIconとprefNameのセット */}
+                <div
+                  className="flex items-center"
+                  style={{
+                    gap: "12px",
+                  }}
+                >
+                  <img src={MapIcon} alt="Map Icon" width="14" height="18" />
+
+                  <p
+                    style={{
+                      width: "72px",
+                      height: "30px",
+                      lineHeight: "30px",
+                      fontFamily: "Noto Sans JP",
+                      fontSize: "24px",
+                      fontWeight: 400,
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    {prefName}
+                  </p>
+                </div>
               </div>
 
               {/* 子2 */}
