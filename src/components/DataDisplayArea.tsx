@@ -397,47 +397,39 @@ const DataDisplayArea: React.FC = () => {
         ) : ( */}
           <div
             style={{
+              width: "1457px",
+              height: "780px",
               display: "flex",
               justifyContent: "center", // 横方向の中央寄せ
               alignItems: "center", // 縦方向の中央寄せ
-              minHeight: "70vh", // 高さを設定
             }}
           >
+            {/* 子1と子2をラップするコンテナ */}
             <div
               style={{
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "70vh",
+                flexDirection: "column", // 子1と子2を縦並びにする
+                gap: "48px",
               }}
             >
-              {/* 子1と子2をラップするコンテナ */}
+              {/* 子1 */}
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column", // 子1と子2を縦並びにする
-                  gap: "48px",
+                  width: "auto", // Hugの幅
+                  height: "auto", // Hugの高さ
                 }}
               >
-                {/* 子1 */}
-                <div
-                  style={{
-                    width: "auto", // Hugの幅
-                    height: "auto", // Hugの高さ
-                  }}
-                >
-                  <span>コンテンツ1</span>
-                </div>
+                <span>コンテンツ1</span>
+              </div>
 
-                {/* 子2 */}
-                <div
-                  style={{
-                    width: "auto", // Hugの幅
-                    height: "auto", // Hugの高さ
-                  }}
-                >
-                  <span>コンテンツ2</span>
-                </div>
+              {/* 子2 */}
+              <div
+                style={{
+                  width: "auto", // Hugの幅
+                  height: "auto", // Hugの高さ
+                }}
+              >
+                <span>コンテンツ2</span>
               </div>
             </div>
           </div>
