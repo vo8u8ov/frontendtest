@@ -43,6 +43,7 @@ const DataDisplayArea: React.FC = () => {
   useEffect(() => {
     const fetchAndCacheData = async () => {
       try {
+        setError(null); // エラー状態をリセット
         // すべての都道府県データを取得
         const allPrefData: Record<number, EstateTransactionResponse> = {};
         const fetchPromises = Array.from({ length: 47 }, (_, i) => i + 1).map(
