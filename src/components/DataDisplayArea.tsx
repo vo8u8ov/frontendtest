@@ -195,7 +195,7 @@ const DataDisplayArea: React.FC = () => {
     labels: [prefName, "全国平均"],
     datasets: [
       {
-        // label: "取引価格 (円/㎡)",
+        label: "取引価格 (円/㎡)",
         data: [
           estateData
             ? estateData.years.find((year) => year.year === selectedYear)
@@ -270,11 +270,8 @@ const DataDisplayArea: React.FC = () => {
         ticks: {
           color: "rgba(255, 255, 255, 1)",
           font: {
-            size: 16,
-            family: "Noto Sans JP",
-            weight: 700,
+            size: 10,
           },
-          align: "start",
         },
         border: {
           color: "rgba(255, 255, 255, 1)", // X軸の外側の線の色
