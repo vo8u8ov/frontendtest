@@ -387,6 +387,8 @@ const DataDisplayArea: React.FC = () => {
           style={{
             width: "1457px",
             height: "780px",
+            display: "flex",
+            flexDirection: "column",
             gap: "80px",
           }}
         >
@@ -401,95 +403,43 @@ const DataDisplayArea: React.FC = () => {
               minHeight: "70vh", // 高さを設定
             }}
           >
-            {/* temp */}
-            <div style={{ width: "713px", height: "446px" }}>
-              <div>
-                <div
-                  className="flex items-center justify-center"
-                  style={{
-                    width: "498px",
-                    height: "30px",
-                    gap: "48px",
-                    margin: "0 auto", // 中央寄せ
-                  }}
-                >
-                  {/* MapIconとprefNameのセット */}
-                  <div
-                    className="flex items-center"
-                    style={{
-                      gap: "12px",
-                    }}
-                  >
-                    <img
-                      src={MapIcon}
-                      alt="Map Icon"
-                      width="14"
-                      height="18"
-                      className="text-gray-300"
-                    />
-                    <span className="text-sm">{prefName}</span>
-                  </div>
-
-                  <div
-                    className="flex items-center"
-                    style={{
-                      gap: "12px",
-                    }}
-                  >
-                    <img
-                      src={CalendarIcon}
-                      alt="Calendar Icon"
-                      width="16"
-                      height="18"
-                      className="text-gray-300"
-                    />
-                    <span className="text-sm">{selectedYear}</span>
-                  </div>
-
-                  <div
-                    className="flex items-center"
-                    style={{
-                      gap: "12px",
-                    }}
-                  >
-                    <img
-                      src={TypeIcon}
-                      alt="Type Icon"
-                      width="18"
-                      height="18"
-                      className="text-gray-300"
-                    />
-                    <span className="text-sm">{displayTypeText}</span>
-                  </div>
-                </div>
-              </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "70vh",
+              }}
+            >
+              {/* 子1と子2をラップするコンテナ */}
               <div
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginLeft: "30px",
-                  position: "relative",
-                  bottom: "5px",
+                  display: "flex",
+                  flexDirection: "column", // 子1と子2を縦並びにする
+                  gap: "48px",
                 }}
               >
-                <span
+                {/* 子1 */}
+                <div
                   style={{
-                    fontFamily: "Noto Sans JP",
-                    fontSize: "12px",
-                    fontWeight: 400,
-                    lineHeight: "12px",
-                    textAlign: "right",
-                    width: "fit-content",
-                    height: "fit-content",
+                    width: "auto", // Hugの幅
+                    height: "auto", // Hugの高さ
                   }}
                 >
-                  (円/㎡)
-                </span>
+                  <span>コンテンツ1</span>
+                </div>
+
+                {/* 子2 */}
+                <div
+                  style={{
+                    width: "auto", // Hugの幅
+                    height: "auto", // Hugの高さ
+                  }}
+                >
+                  <span>コンテンツ2</span>
+                </div>
               </div>
-              <Bar data={chartData} options={chartOptions} />
             </div>
-            {/* )} */}
           </div>
         </div>
         <div>
