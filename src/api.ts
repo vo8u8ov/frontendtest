@@ -8,7 +8,7 @@ let cachedApiKey: string | null = null;
 // FirebaseからAPIキーを取得する関数
 export const fetchApiKeyFromFirebase = async (): Promise<string | null> => {
   if (cachedApiKey) {
-    console.log("キャッシュされたAPIキーを使用します:", cachedApiKey);
+    console.log("キャッシュされたAPIキーを使用します:");
     return cachedApiKey; // キャッシュからAPIキーを返す
   }
 
