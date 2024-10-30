@@ -415,8 +415,8 @@ const DataDisplayArea: React.FC = () => {
               {/* 子1 */}
               <div
                 style={{
-                  width: "auto", // Hugの幅
-                  height: "auto", // Hugの高さ
+                  width: "auto",
+                  height: "auto",
                 }}
               >
                 <span>コンテンツ1</span>
@@ -425,11 +425,20 @@ const DataDisplayArea: React.FC = () => {
               {/* 子2 */}
               <div
                 style={{
-                  width: "auto", // Hugの幅
-                  height: "auto", // Hugの高さ
+                  width: "auto",
+                  height: "auto",
                 }}
               >
-                <span>コンテンツ2</span>
+                <div
+                  style={{
+                    width: "660px", // temp
+                    height: "446px", // 高さを446pxに固定
+                    padding: "0px 0px 5px 0px",
+                    gap: "10px",
+                  }}
+                >
+                  <Bar data={chartData} options={chartOptions} />
+                </div>
               </div>
             </div>
           </div>
