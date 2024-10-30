@@ -104,10 +104,7 @@ const DataDisplayArea: React.FC = () => {
         let totalValue = 0;
 
         if (Object.keys(allPrefData).length !== 47) {
-          console.log("エラー");
-          throw new Error(
-            "Error: allPrefData should contain exactly 47 entries."
-          );
+          throw new Error("Error: 都道府県データが揃っていない");
         }
 
         for (let i = 1; i <= 47; i++) {
