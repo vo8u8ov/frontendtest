@@ -115,26 +115,32 @@ export const fetchDataFromFirebase = async (
   year: number
 ): Promise<EstateTransactionResponse | null> => {
   console.log("APIでデータを取得");
-  const dataRef = ref(database, `prefectures/${prefCode}/${displayType}`);
-  const snapshot = await get(dataRef);
 
-  if (snapshot.exists()) {
-    const data = snapshot.val() as EstateTransactionResponse;
+  try {
+    const dataRef = ref(database, `prefectures/${prefCode}/${displayType}`);
+    const snapshot = await get(dataRef);
 
-    // years配列から指定されたyearのデータを取得
-    const yearData = data.years.find((yearData) => yearData.year === year);
+    if (snapshot.exists()) {
+      const data = snapshot.val() as EstateTransactionResponse;
 
-    if (yearData) {
-      return {
-        ...data,
-        years: [yearData], // 見つかった年データだけを含む新しいオブジェクトを返す
-      };
+      // years配列から指定されたyearのデータを取得
+      const yearData = data.years.find((yearData) => yearData.year === year);
+
+      if (yearData) {
+        return {
+          ...data,
+          years: [yearData], // 見つかった年データだけを含む新しいオブジェクトを返す
+        };
+      } else {
+        console.log("指定された年のデータが見つかりませんでした");
+        return null; // 指定された年のデータが見つからなかった場合
+      }
     } else {
-      console.log("指定された年のデータが見つかりませんでした");
-      return null; // 指定された年のデータが見つからなかった場合
+      console.log("データが見つかりませんでした");
+      return null; // データが存在しない場合
     }
-  } else {
-    console.log("データが見つかりませんでした");
-    return null; // データが存在しない場合
+  } catch (error) {
+    console.error("データ取得中にエラーが発生しました:", error);
+    return null; // エラーが発生した場合はnullを返す
   }
 };

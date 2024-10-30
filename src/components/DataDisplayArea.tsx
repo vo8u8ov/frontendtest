@@ -537,16 +537,29 @@ const DataDisplayArea: React.FC = () => {
                   height: "auto",
                 }}
               >
-                <div
-                  style={{
-                    width: "660px", // temp
-                    height: "446px", // 高さを446pxに固定
-                    padding: "0px 0px 5px 0px",
-                    gap: "10px",
-                  }}
-                >
-                  <Bar data={chartData} options={chartOptions} />
-                </div>
+                {error ? (
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "20px",
+                      textAlign: "center",
+                      marginTop: "30%",
+                    }}
+                  >
+                    {error}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      width: "660px", // temp
+                      height: "446px", // 高さを446pxに固定
+                      padding: "0px 0px 5px 0px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Bar data={chartData} options={chartOptions} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
