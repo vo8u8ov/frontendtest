@@ -366,7 +366,7 @@ const DataDisplayArea: React.FC = () => {
                 取引価格
               </p>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center mt-4">
               <p
                 style={{
                   width: "131px",
