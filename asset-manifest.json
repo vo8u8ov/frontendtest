@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/frontendtest/static/css/main.68e050e3.css",
+    "main.js": "/frontendtest/static/js/main.2d78a586.js",
+    "static/js/453.0da5b56f.chunk.js": "/frontendtest/static/js/453.0da5b56f.chunk.js",
+    "static/media/backgroundimage.svg": "/frontendtest/static/media/backgroundimage.848a92c144ed7d955b2741488c2601a3.svg",
+    "static/media/copyright.svg": "/frontendtest/static/media/copyright.14dff6c156963d1394dbb4b747a512b8.svg",
+    "static/media/calendar-check.svg": "/frontendtest/static/media/calendar-check.fafac996364b5b96ed531adbe2f41192.svg",
+    "static/media/logo-landit.svg": "/frontendtest/static/media/logo-landit.3a77eb65f63e548e3f6896f2615efa3f.svg",
+    "static/media/resources.svg": "/frontendtest/static/media/resources.bfe79f40872f3493495df8e72f789b82.svg",
+    "static/media/marker.svg": "/frontendtest/static/media/marker.ea9ab4c60b3052da794784fbdf7d9c0f.svg",
+    "static/media/graphicon.svg": "/frontendtest/static/media/graphicon.c1e62b756ecff51504b30b09a017748d.svg",
+    "static/media/calendar-check2.svg": "/frontendtest/static/media/calendar-check2.7a6aec39ed2d3f70703415f8d8a9a127.svg",
+    "static/media/resources2.svg": "/frontendtest/static/media/resources2.51e93e5b2302e7904732cfe47d98d859.svg",
+    "index.html": "/frontendtest/index.html",
+    "static/media/privacypolicy.svg": "/frontendtest/static/media/privacypolicy.f8b617b4ecdb0e82d470cb239079d782.svg",
+    "static/media/terms.svg": "/frontendtest/static/media/terms.f8b617b4ecdb0e82d470cb239079d782.svg",
+    "static/media/marker2.svg": "/frontendtest/static/media/marker2.3ddfb5aaa36d75ce3e9181217794c003.svg",
+    "main.68e050e3.css.map": "/frontendtest/static/css/main.68e050e3.css.map",
+    "main.2d78a586.js.map": "/frontendtest/static/js/main.2d78a586.js.map",
+    "453.0da5b56f.chunk.js.map": "/frontendtest/static/js/453.0da5b56f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.68e050e3.css",
+    "static/js/main.2d78a586.js"
+  ]
+}
