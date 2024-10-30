@@ -136,7 +136,6 @@ export const fetchDataFromFirebase = async (
           years: [yearData], // 見つかった年データだけを含む新しいオブジェクトを返す
         };
       } else {
-        console.log("指定された年のデータが見つかりませんでした");
         return null; // 指定された年のデータが見つからなかった場合
       }
     } else {
