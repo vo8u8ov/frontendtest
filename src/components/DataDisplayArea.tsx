@@ -270,7 +270,9 @@ const DataDisplayArea: React.FC = () => {
         ticks: {
           color: "rgba(255, 255, 255, 1)",
           font: {
-            size: 10,
+            size: 16,
+            family: "Noto Sans JP",
+            weight: 700,
           },
         },
         border: {
