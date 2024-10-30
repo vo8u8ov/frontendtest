@@ -425,6 +425,29 @@ const DataDisplayArea: React.FC = () => {
               {/* 子2 */}
               <div
                 style={{
+                  width: "53px",
+                  height: "12px",
+                  marginLeft: "15px",
+                  marginBottom: "-30px",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "Noto Sans JP",
+                    fontSize: "12px",
+                    fontWeight: 400,
+                    lineHeight: "12px",
+                    textAlign: "right",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  (円/㎡)
+                </p>
+              </div>
+
+              {/* 子3 */}
+              <div
+                style={{
                   width: "auto",
                   height: "auto",
                 }}
