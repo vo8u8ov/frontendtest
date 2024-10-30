@@ -39,73 +39,77 @@ export const saveDataToFirebase = async (
   console.log("saveDataToFirebase実行");
   console.log("prefCode:", prefCode, " displayType:", displayType);
 
-  // APIキーをFirebaseから取得
-  const apiKey = await fetchApiKeyFromFirebase();
-  if (!apiKey) {
-    console.error("APIキーが取得できませんでした。処理を中断します。");
-    return; // APIキーがない場合は処理を中断
-  }
-
-  // APIを呼び出してデータを取得
-  const response = await fetch(
-    `https://opendata.resas-portal.go.jp/api/v1/townPlanning/estateTransaction/bar?year=${year}&prefCode=${prefCode}&displayType=${displayType}`,
-    {
-      headers: {
-        "X-API-KEY": apiKey || "エラー: APIキーが設定されていません",
-      },
+  try {
+    // APIキーをFirebaseから取得
+    const apiKey = await fetchApiKeyFromFirebase();
+    if (!apiKey) {
+      console.error("APIキーが取得できませんでした。処理を中断します。");
+      return; // APIキーがない場合は処理を中断
     }
-  );
-  console.log("response：", response);
 
-  // APIのレスポンスチェック
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`データの取得に失敗しました: ${errorMessage}`);
-  }
+    // APIを呼び出してデータを取得
+    const response = await fetch(
+      `https://opendata.resas-portal.go.jp/api/v1/townPlanning/estateTransaction/bar?year=${year}&prefCode=${prefCode}&displayType=${displayType}`,
+      {
+        headers: {
+          "X-API-KEY": apiKey || "エラー: APIキーが設定されていません",
+        },
+      }
+    );
+    console.log("response：", response);
 
-  // データをJSON形式で取得
-  const data = await response.json();
-  const { prefCode: code, prefName, years } = data.result;
+    // APIのレスポンスチェック
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`データの取得に失敗しました: ${errorMessage}`);
+    }
 
-  /// Firebaseから現在のデータを取得
-  const dataRef = ref(database, `prefectures/${code}/${displayType}`);
-  const snapshot = await get(dataRef);
+    // データをJSON形式で取得
+    const data = await response.json();
+    const { prefCode: code, prefName, years } = data.result;
 
-  // 既存のデータがあれば、それを取得
-  let existingData: EstateTransactionResponse = {
-    prefCode,
-    prefName,
-    displayType,
-    years: [],
-  };
+    /// Firebaseから現在のデータを取得
+    const dataRef = ref(database, `prefectures/${code}/${displayType}`);
+    const snapshot = await get(dataRef);
 
-  if (snapshot.exists()) {
-    const fetchedData = snapshot.val();
-    // 型チェックを追加
-    if (fetchedData && typeof fetchedData === "object") {
-      existingData = fetchedData as EstateTransactionResponse;
+    // 既存のデータがあれば、それを取得
+    let existingData: EstateTransactionResponse = {
+      prefCode,
+      prefName,
+      displayType,
+      years: [],
+    };
+
+    if (snapshot.exists()) {
+      const fetchedData = snapshot.val();
+      // 型チェックを追加
+      if (fetchedData && typeof fetchedData === "object") {
+        existingData = fetchedData as EstateTransactionResponse;
+      } else {
+        console.error("取得したデータの型が正しくありません:", fetchedData);
+      }
+    }
+
+    // 新しい年のデータを追加
+    const newYearData: YearData = { year, value: years[0].value }; // APIから取得した新しいデータの値を使用
+    const existingYearData = existingData.years.find(
+      (yearData) => yearData.year === year
+    );
+
+    if (!existingYearData) {
+      // 同じ年のデータが存在しない場合は追加
+      existingData.years.push(newYearData);
+      console.log(`年${year}のデータが追加されました。`);
     } else {
-      console.error("取得したデータの型が正しくありません:", fetchedData);
+      console.log(`年${year}のデータは既に存在しています。`);
     }
+
+    // 更新されたデータをFirebaseに保存
+    await set(dataRef, existingData);
+    console.log("データがDBに保存されました:", existingData);
+  } catch (error) {
+    console.error("データ保存中にエラーが発生しました:", error);
   }
-
-  // 新しい年のデータを追加
-  const newYearData: YearData = { year, value: years[0].value }; // APIから取得した新しいデータの値を使用
-  const existingYearData = existingData.years.find(
-    (yearData) => yearData.year === year
-  );
-
-  if (!existingYearData) {
-    // 同じ年のデータが存在しない場合は追加
-    existingData.years.push(newYearData);
-    console.log(`年${year}のデータが追加されました。`);
-  } else {
-    console.log(`年${year}のデータは既に存在しています。`);
-  }
-
-  // 更新されたデータをFirebaseに保存
-  await set(dataRef, existingData);
-  console.log("データがDBに保存されました:", existingData);
 };
 
 // Firebaseからデータを取得する関数
