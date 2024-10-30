@@ -418,7 +418,7 @@ const DataDisplayArea: React.FC = () => {
                   width: "auto",
                   height: "auto",
                   display: "flex",
-                  gap: "12px",
+                  gap: "48px",
                   justifyContent: "center",
                 }}
               >
