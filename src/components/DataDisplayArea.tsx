@@ -68,7 +68,7 @@ const DataDisplayArea: React.FC = () => {
                   displayType,
                   selectedYear
                 );
-                console.log("latestApiData:", latestApiData);
+
                 if (latestApiData) {
                   allPrefData[i] = latestApiData;
                   // localStorageに最新データを保存
